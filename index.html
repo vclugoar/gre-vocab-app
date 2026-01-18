@@ -589,39 +589,168 @@
             box-shadow: 0 8px 30px rgba(124, 58, 237, 0.5);
         }
 
-        /* Responsive */
-        @media (max-width: 600px) {
-            .nav {
+        /* Responsive - Tablet */
+        @media (max-width: 768px) {
+            .main {
                 padding: 12px;
             }
 
-            .nav-btn {
-                padding: 12px 16px;
-                font-size: 14px;
+            .flashcard {
+                height: 320px;
             }
 
-            .flashcard {
-                height: 300px;
+            .flashcard-face {
+                padding: 24px;
             }
 
             .flashcard-word {
-                font-size: 36px;
+                font-size: 38px;
             }
 
             .flashcard-definition {
                 font-size: 18px;
             }
 
+            .flashcard-grid.grid-2,
+            .flashcard-grid.grid-4 {
+                grid-template-columns: 1fr;
+            }
+
+            /* Reset grid card sizes when single column */
+            .flashcard-grid.grid-2 .flashcard,
+            .flashcard-grid.grid-4 .flashcard {
+                height: 320px;
+            }
+
+            .flashcard-grid.grid-2 .flashcard-word,
+            .flashcard-grid.grid-4 .flashcard-word {
+                font-size: 38px;
+            }
+
+            .flashcard-grid.grid-2 .flashcard-face,
+            .flashcard-grid.grid-4 .flashcard-face {
+                padding: 24px;
+            }
+
+            .flashcard-grid.grid-2 .flashcard-definition,
+            .flashcard-grid.grid-4 .flashcard-definition {
+                font-size: 18px;
+            }
+
+            .flashcard-grid.grid-2 .card-actions .action-btn span,
+            .flashcard-grid.grid-4 .card-actions .action-btn span {
+                display: inline;
+            }
+
+            .card-actions {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .stack-selector-wrapper {
+                flex: 1 1 100%;
+                justify-content: center;
+                margin-top: 4px;
+            }
+        }
+
+        /* Responsive - Mobile */
+        @media (max-width: 600px) {
+            .main {
+                padding: 10px;
+            }
+
+            .header {
+                padding: 12px 16px;
+            }
+
+            .logo {
+                font-size: 18px;
+            }
+
+            .streak-badge {
+                padding: 6px 10px;
+                font-size: 12px;
+            }
+
+            .flashcard {
+                height: 280px;
+            }
+
+            .flashcard-face {
+                padding: 18px;
+            }
+
+            .flashcard-word {
+                font-size: 32px;
+            }
+
+            .flashcard-hint {
+                font-size: 13px;
+            }
+
+            .flashcard-definition {
+                font-size: 16px;
+                line-height: 1.5;
+            }
+
+            .flashcard-section-title {
+                font-size: 11px;
+            }
+
+            .mnemonic-item {
+                font-size: 13px;
+                padding: 10px 12px;
+            }
+
             .quiz-options {
                 grid-template-columns: 1fr;
             }
 
-            .flashcard-actions {
-                flex-direction: column;
+            .card-actions {
+                flex-wrap: wrap;
+                gap: 8px;
             }
 
             .action-btn {
-                max-width: 100%;
+                flex: 1 1 45%;
+                max-width: none;
+                padding: 12px 16px;
+                font-size: 14px;
+            }
+
+            .stack-selector-wrapper {
+                flex: 1 1 100%;
+                justify-content: center;
+            }
+
+            .stack-selector-label {
+                font-size: 11px;
+            }
+
+            .stack-selector {
+                font-size: 11px;
+            }
+
+            /* Reset grid card sizes when single column on mobile */
+            .flashcard-grid.grid-2 .flashcard,
+            .flashcard-grid.grid-4 .flashcard {
+                height: 280px;
+            }
+
+            .flashcard-grid.grid-2 .flashcard-word,
+            .flashcard-grid.grid-4 .flashcard-word {
+                font-size: 32px;
+            }
+
+            .flashcard-grid.grid-2 .flashcard-face,
+            .flashcard-grid.grid-4 .flashcard-face {
+                padding: 18px;
+            }
+
+            .flashcard-grid.grid-2 .flashcard-definition,
+            .flashcard-grid.grid-4 .flashcard-definition {
+                font-size: 16px;
             }
 
             .stat-cards {
@@ -630,6 +759,82 @@
 
             .stack-legend {
                 grid-template-columns: repeat(2, 1fr);
+            }
+
+            .mode-tabs {
+                padding: 4px;
+            }
+
+            .mode-tab {
+                padding: 10px 12px;
+                font-size: 13px;
+            }
+
+            .review-stack-header {
+                padding: 12px;
+            }
+
+            .review-stack-title {
+                font-size: 14px;
+            }
+
+            .review-stack-desc {
+                font-size: 11px;
+            }
+
+            .review-stack-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 16px;
+            }
+
+            .custom-mnemonic-section {
+                margin-top: 12px;
+                padding-top: 12px;
+            }
+
+            .custom-mnemonic-input {
+                font-size: 13px;
+                padding: 8px 10px;
+            }
+
+            .custom-mnemonic-display {
+                font-size: 13px;
+                padding: 10px 12px;
+            }
+
+            .daily-goal-inline {
+                padding: 6px 10px;
+                font-size: 12px;
+            }
+
+            .shuffle-btn {
+                padding: 6px 10px;
+                font-size: 11px;
+            }
+
+            .reset-btn {
+                padding: 6px 8px;
+                font-size: 11px;
+            }
+
+            .grid-selector {
+                gap: 2px;
+            }
+
+            .grid-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+
+            .hamburger-container {
+                top: 70px;
+                right: 10px;
+            }
+
+            .hamburger-btn {
+                width: 42px;
+                height: 42px;
             }
         }
 
@@ -805,24 +1010,6 @@
         .flashcard-grid.grid-4 .stack-selector {
             font-size: 10px;
             padding: 2px 4px;
-        }
-
-        /* Responsive grid adjustments */
-        @media (max-width: 600px) {
-            .flashcard-grid.grid-2,
-            .flashcard-grid.grid-4 {
-                grid-template-columns: 1fr;
-            }
-
-            .flashcard-grid.grid-2 .flashcard,
-            .flashcard-grid.grid-4 .flashcard {
-                height: 280px;
-            }
-
-            .flashcard-grid.grid-2 .flashcard-word,
-            .flashcard-grid.grid-4 .flashcard-word {
-                font-size: 32px;
-            }
         }
 
         /* Mode Tabs (Daily Learn / Review) */
