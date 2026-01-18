@@ -2282,7 +2282,7 @@
             };
 
             const totalWords = stackTotals[1] + stackTotals[2] + stackTotals[3] + stackTotals[4];
-            document.getElementById('reviewDueCount').textContent = `${totalWords} words in review`;
+            document.getElementById('reviewDueCount').textContent = totalWords;
 
             if (totalWords === 0) {
                 container.innerHTML = `
