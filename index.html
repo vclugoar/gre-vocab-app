@@ -897,7 +897,7 @@
 
             .hamburger-container {
                 top: 70px;
-                right: 10px;
+                left: 10px;
             }
 
             .hamburger-btn {
@@ -1269,6 +1269,113 @@
 
         .modal-btn:hover {
             transform: translateY(-2px);
+        }
+
+        /* List Selector Modal */
+        .list-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 1001;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .list-modal-overlay.show {
+            display: flex;
+        }
+
+        .list-modal {
+            background: white;
+            border-radius: 24px;
+            padding: 32px;
+            max-width: 420px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .list-modal-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: var(--text-dark);
+            text-align: center;
+        }
+
+        .list-option {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px;
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .list-option:hover {
+            border-color: var(--primary);
+            background: #F5F3FF;
+            transform: translateY(-2px);
+        }
+
+        .list-option.active {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, #F5F3FF 0%, #FDF4FF 100%);
+        }
+
+        .list-option-icon {
+            font-size: 32px;
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-gradient);
+            border-radius: 12px;
+        }
+
+        .list-option-info {
+            flex: 1;
+        }
+
+        .list-option-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .list-option-desc {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* List Badge in Header */
+        .list-badge {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: rgba(124, 58, 237, 0.15);
+            color: var(--primary);
+            margin-left: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            vertical-align: middle;
+        }
+
+        .list-badge:hover {
+            background: var(--primary);
+            color: white;
         }
 
         /* Review Stack Sections */
@@ -1694,7 +1801,7 @@
         .hamburger-container {
             position: fixed;
             top: 80px;
-            right: 16px;
+            left: 16px;
             z-index: 100;
         }
 
@@ -1760,7 +1867,7 @@
             display: none;
             position: absolute;
             top: 56px;
-            right: 0;
+            left: 0;
             background: var(--card-bg);
             border-radius: 16px;
             padding: 8px;
@@ -1823,7 +1930,7 @@
 <body>
     <header class="header">
         <div class="header-content">
-            <div class="logo">Lexica</div>
+            <div class="logo">Lexica<span class="list-badge" id="listBadge" onclick="openListModal()">Essential</span></div>
             <div class="streak-badge" id="streakBadge">
                 <span>🔥</span>
                 <span id="streakCount">0</span> day streak
@@ -1851,6 +1958,10 @@
             <button class="menu-item" data-view="progress" onclick="selectView('progress')">
                 <span class="menu-item-icon">📊</span>
                 Progress
+            </button>
+            <button class="menu-item" onclick="openListModal()">
+                <span class="menu-item-icon">📋</span>
+                Switch List
             </button>
         </div>
     </div>
@@ -1945,6 +2056,27 @@
             </div>
         </div>
 
+        <!-- List Selector Modal -->
+        <div class="list-modal-overlay" id="listModal">
+            <div class="list-modal">
+                <div class="list-modal-title">Choose Your Word List</div>
+                <div class="list-option" id="listOptionEssential" onclick="selectList('essential')">
+                    <div class="list-option-icon">📚</div>
+                    <div class="list-option-info">
+                        <div class="list-option-title">Essential</div>
+                        <div class="list-option-desc">502 core GRE words</div>
+                    </div>
+                </div>
+                <div class="list-option" id="listOptionAdvanced" onclick="selectList('advanced')">
+                    <div class="list-option-icon">🎯</div>
+                    <div class="list-option-info">
+                        <div class="list-option-title">Advanced</div>
+                        <div class="list-option-desc">500 challenging words</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Quiz View -->
         <div class="view" id="quizView">
             <div class="quiz-score">
@@ -2028,6 +2160,7 @@
     </main>
 
     <script src="vocab-data.js"></script>
+    <script src="vocab-data-advanced.js"></script>
     <script>
         // ============================================
         // State Management
@@ -2046,7 +2179,81 @@
             4: { title: 'Stack 4: Biweekly', desc: 'Review every two weeks', icon: '🟢' }
         };
 
-        let progress = JSON.parse(localStorage.getItem('gre-vocab-progress')) || {};
+        // ============================================
+        // Multiple List Support
+        // ============================================
+        let activeList = localStorage.getItem('lexica-active-list') || null;
+        let VOCAB_DATA = []; // Will be set based on active list
+
+        function getActiveVocab() {
+            return activeList === 'advanced' ? VOCAB_ADVANCED : VOCAB_ESSENTIALS;
+        }
+
+        function getProgressKey() {
+            return `lexica-progress-${activeList}`;
+        }
+
+        // Migrate old progress data for existing users
+        function migrateOldProgress() {
+            const oldProgress = localStorage.getItem('gre-vocab-progress');
+            if (oldProgress && !localStorage.getItem('lexica-progress-essential')) {
+                localStorage.setItem('lexica-progress-essential', oldProgress);
+                localStorage.setItem('lexica-active-list', 'essential');
+                localStorage.removeItem('gre-vocab-progress');
+                activeList = 'essential';
+            }
+        }
+
+        // List Modal Functions
+        function openListModal() {
+            document.getElementById('listModal').classList.add('show');
+            // Highlight current selection
+            document.getElementById('listOptionEssential').classList.toggle('active', activeList === 'essential');
+            document.getElementById('listOptionAdvanced').classList.toggle('active', activeList === 'advanced');
+            // Close hamburger menu if open
+            document.getElementById('hamburgerBtn').classList.remove('active');
+            document.getElementById('hamburgerMenu').classList.remove('show');
+        }
+
+        function closeListModal() {
+            document.getElementById('listModal').classList.remove('show');
+        }
+
+        function selectList(listType) {
+            activeList = listType;
+            localStorage.setItem('lexica-active-list', listType);
+            VOCAB_DATA = getActiveVocab();
+            progress = JSON.parse(localStorage.getItem(getProgressKey())) || {};
+            initProgress();
+            closeListModal();
+            updateListBadge();
+            // Reset daily queue for new list
+            dailyQueueInitialized = false;
+            dailyQueue = [];
+            activeReviewStack = null;
+            // Re-render current view
+            if (currentMode === 'daily') {
+                renderDailyLearn();
+            } else {
+                renderReviewMode();
+            }
+            updateBadges();
+        }
+
+        function updateListBadge() {
+            const badge = document.getElementById('listBadge');
+            if (badge && activeList) {
+                badge.textContent = activeList === 'advanced' ? 'Advanced' : 'Essential';
+            }
+        }
+
+        // Initialize list on load
+        migrateOldProgress();
+        if (activeList) {
+            VOCAB_DATA = getActiveVocab();
+        }
+
+        let progress = activeList ? (JSON.parse(localStorage.getItem(getProgressKey())) || {}) : {};
         let stats = JSON.parse(localStorage.getItem('gre-vocab-stats')) || {
             streak: 0,
             lastStudyDate: null,
@@ -2093,7 +2300,9 @@
         }
 
         function saveProgress() {
-            localStorage.setItem('gre-vocab-progress', JSON.stringify(progress));
+            if (activeList) {
+                localStorage.setItem(getProgressKey(), JSON.stringify(progress));
+            }
         }
 
         function saveStats() {
@@ -2763,6 +2972,13 @@
                             <span class="help-item-text">Go to <strong>Progress</strong> to export/import your data and sync across devices</span>
                         </div>
                     </div>
+                    <div class="help-section">
+                        <div class="help-section-title">Switch Word Lists</div>
+                        <div class="help-item">
+                            <span class="help-item-icon">📋</span>
+                            <span class="help-item-text">Use the <strong>menu</strong> to switch between Essential and Advanced word lists</span>
+                        </div>
+                    </div>
                 `;
             } else if (section === 'review') {
                 title.textContent = 'How to Review';
@@ -2783,7 +2999,7 @@
                         </div>
                         <div class="help-item">
                             <span class="help-item-icon">🟢</span>
-                            <span class="help-item-text"><strong>Stack 4 (Mastered)</strong> — you know these well!</span>
+                            <span class="help-item-text"><strong>Stack 4 (Biweekly)</strong> — reviewed every 2 weeks</span>
                         </div>
                     </div>
                     <div class="help-section">
@@ -2802,6 +3018,13 @@
                         <div class="help-item">
                             <span class="help-item-icon">📊</span>
                             <span class="help-item-text">Go to <strong>Progress</strong> to export/import your data and sync across devices</span>
+                        </div>
+                    </div>
+                    <div class="help-section">
+                        <div class="help-section-title">Switch Word Lists</div>
+                        <div class="help-item">
+                            <span class="help-item-icon">📋</span>
+                            <span class="help-item-text">Use the <strong>menu</strong> to switch between Essential and Advanced word lists</span>
                         </div>
                     </div>
                 `;
@@ -2903,10 +3126,13 @@
         // Export/Import Functions
         // ============================================
         function exportData() {
+            // Export progress for both lists
             const data = {
-                version: 1,
+                version: 2,
                 exportDate: new Date().toISOString(),
-                progress: progress,
+                activeList: activeList,
+                progressEssential: JSON.parse(localStorage.getItem('lexica-progress-essential')) || {},
+                progressAdvanced: JSON.parse(localStorage.getItem('lexica-progress-advanced')) || {},
                 stats: stats,
                 settings: {
                     dailyGoal: dailyGoal,
@@ -2938,10 +3164,21 @@
                 try {
                     const data = JSON.parse(e.target.result);
 
-                    // Validate data structure
-                    if (!data.progress || !data.stats) {
-                        alert('❌ Invalid backup file. Please select a valid Lexica backup.');
-                        return;
+                    // Handle version 1 (old format) and version 2 (new format)
+                    const isV1 = data.version === 1 || (!data.version && data.progress);
+
+                    if (isV1) {
+                        // Old format - single progress object
+                        if (!data.progress || !data.stats) {
+                            alert('❌ Invalid backup file. Please select a valid Lexica backup.');
+                            return;
+                        }
+                    } else {
+                        // New format - separate progress for each list
+                        if (!data.stats) {
+                            alert('❌ Invalid backup file. Please select a valid Lexica backup.');
+                            return;
+                        }
                     }
 
                     if (!confirm('⚠️ Import this backup? This will replace all your current progress.')) {
@@ -2949,9 +3186,26 @@
                         return;
                     }
 
-                    // Import progress
-                    progress = data.progress;
+                    if (isV1) {
+                        // Import old format as essential list progress
+                        localStorage.setItem('lexica-progress-essential', JSON.stringify(data.progress));
+                        localStorage.setItem('lexica-active-list', 'essential');
+                    } else {
+                        // Import new format
+                        if (data.progressEssential) {
+                            localStorage.setItem('lexica-progress-essential', JSON.stringify(data.progressEssential));
+                        }
+                        if (data.progressAdvanced) {
+                            localStorage.setItem('lexica-progress-advanced', JSON.stringify(data.progressAdvanced));
+                        }
+                        if (data.activeList) {
+                            localStorage.setItem('lexica-active-list', data.activeList);
+                        }
+                    }
+
+                    // Import stats
                     stats = data.stats;
+                    saveStats();
 
                     // Import settings if available
                     if (data.settings) {
@@ -2962,10 +3216,6 @@
                         localStorage.setItem('gre-vocab-shuffle', shuffleEnabled);
                         localStorage.setItem('gre-vocab-gridSize', gridSize);
                     }
-
-                    // Save imported data
-                    saveProgress();
-                    saveStats();
 
                     alert('✅ Data imported successfully! The page will now reload.');
                     location.reload();
@@ -3185,6 +3435,10 @@
 
         // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
+            // Ignore if user is typing in an input or textarea
+            const tag = document.activeElement.tagName.toLowerCase();
+            if (tag === 'input' || tag === 'textarea') return;
+
             if (document.getElementById('learnView').classList.contains('active')) {
                 if (e.code === 'Space') {
                     e.preventDefault();
@@ -3208,7 +3462,13 @@
         // ============================================
         // Initialize
         // ============================================
-        initProgress();
+        // Show list selector modal if no list is selected
+        if (!activeList) {
+            openListModal();
+        } else {
+            initProgress();
+            updateListBadge();
+        }
         updateStreakDisplay();
         updateDailyGoalDisplay();
         updateShuffleButton();
