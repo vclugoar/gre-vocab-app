@@ -876,71 +876,41 @@
             color: var(--text-dark);
         }
 
-        /* Daily Goal Settings */
-        .daily-goal-card {
+        /* Daily Goal Inline */
+        .daily-goal-inline {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
             background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-light) 100%);
             border-radius: 20px;
-            padding: 20px 24px;
-            margin-bottom: 20px;
             color: white;
-            box-shadow: 0 10px 30px rgba(249, 115, 22, 0.3);
-        }
-
-        .daily-goal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .daily-goal-title {
             font-family: 'Outfit', sans-serif;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 700;
-        }
-
-        .daily-goal-edit {
-            background: rgba(255,255,255,0.2);
-            border: none;
-            padding: 6px 12px;
-            border-radius: 20px;
-            color: white;
-            font-size: 12px;
-            font-weight: 600;
             cursor: pointer;
-            transition: background 0.2s ease;
+            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+            transition: all 0.2s ease;
         }
 
-        .daily-goal-edit:hover {
+        .daily-goal-inline:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4);
+        }
+
+        .goal-bar-inline {
+            width: 40px;
+            height: 6px;
             background: rgba(255,255,255,0.3);
-        }
-
-        .daily-goal-progress {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .daily-goal-bar {
-            flex: 1;
-            height: 12px;
-            background: rgba(255,255,255,0.3);
-            border-radius: 6px;
+            border-radius: 3px;
             overflow: hidden;
         }
 
-        .daily-goal-fill {
+        .goal-fill-inline {
             height: 100%;
             background: white;
-            border-radius: 6px;
+            border-radius: 3px;
             transition: width 0.5s ease;
-        }
-
-        .daily-goal-text {
-            font-family: 'Outfit', sans-serif;
-            font-size: 18px;
-            font-weight: 700;
-            white-space: nowrap;
         }
 
         /* Goal Modal */
@@ -1328,6 +1298,135 @@
         .custom-mnemonic-display::before {
             content: '✨ ';
         }
+
+        /* Hamburger Menu - Side Position */
+        .hamburger-container {
+            position: fixed;
+            top: 80px;
+            right: 16px;
+            z-index: 100;
+        }
+
+        .hamburger-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            padding: 0;
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 50%;
+            font-family: 'Outfit', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .hamburger-btn:hover {
+            border-color: var(--primary-light);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            transform: scale(1.05);
+        }
+
+        .hamburger-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .hamburger-icon {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .hamburger-icon span {
+            display: block;
+            width: 18px;
+            height: 2px;
+            background: currentColor;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-btn.active .hamburger-icon span:nth-child(1) {
+            transform: rotate(45deg) translate(4px, 4px);
+        }
+
+        .hamburger-btn.active .hamburger-icon span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger-btn.active .hamburger-icon span:nth-child(3) {
+            transform: rotate(-45deg) translate(4px, -4px);
+        }
+
+        .hamburger-menu {
+            display: none;
+            position: absolute;
+            top: 56px;
+            right: 0;
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 8px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            z-index: 100;
+            min-width: 180px;
+            animation: menuSlide 0.2s ease;
+        }
+
+        .hamburger-menu.show {
+            display: block;
+        }
+
+        @keyframes menuSlide {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            padding: 12px 16px;
+            border: none;
+            background: transparent;
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-dark);
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .menu-item:hover {
+            background: var(--bg);
+        }
+
+        .menu-item.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+        }
+
+        .menu-item-icon {
+            font-size: 16px;
+        }
+
+        .current-view-label {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -1341,11 +1440,29 @@
         </div>
     </header>
 
-    <nav class="nav">
-        <button class="nav-btn active" data-view="learn">Learn</button>
-        <button class="nav-btn" data-view="quiz">Quiz</button>
-        <button class="nav-btn" data-view="progress">Progress</button>
-    </nav>
+    <div class="hamburger-container">
+        <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleMenu()">
+            <div class="hamburger-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </button>
+        <div class="hamburger-menu" id="hamburgerMenu">
+            <button class="menu-item active" data-view="learn" onclick="selectView('learn')">
+                <span class="menu-item-icon">📚</span>
+                Learn
+            </button>
+            <button class="menu-item" data-view="quiz" onclick="selectView('quiz')">
+                <span class="menu-item-icon">❓</span>
+                Quiz
+            </button>
+            <button class="menu-item" data-view="progress" onclick="selectView('progress')">
+                <span class="menu-item-icon">📊</span>
+                Progress
+            </button>
+        </div>
+    </div>
 
     <main class="main">
         <!-- Learn View -->
@@ -1362,30 +1479,19 @@
 
             <!-- Daily Learn Mode -->
             <div id="dailyLearnMode">
-                <div class="daily-goal-card">
-                    <div class="daily-goal-header">
-                        <div class="daily-goal-title">Daily Goal</div>
-                        <button class="daily-goal-edit" onclick="openGoalModal()">Edit Goal</button>
-                    </div>
-                    <div class="daily-goal-progress">
-                        <div class="daily-goal-bar">
-                            <div class="daily-goal-fill" id="dailyGoalFill" style="width: 0%"></div>
+                <div style="display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap;">
+                    <div class="daily-goal-inline" onclick="openGoalModal()">
+                        <span>Goal:</span>
+                        <span id="dailyLearnedCount">0</span>/<span id="dailyGoalDisplay">10</span>
+                        <div class="goal-bar-inline">
+                            <div class="goal-fill-inline" id="dailyGoalFill"></div>
                         </div>
-                        <div class="daily-goal-text"><span id="dailyLearnedCount">0</span> / <span id="dailyGoalDisplay">10</span></div>
-                    </div>
-                </div>
-
-                <div style="display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap;">
-                    <div class="grid-selector" id="gridSelector" style="margin-bottom: 0;">
-                        <button class="grid-btn active" data-grid="1">1</button>
-                        <button class="grid-btn" data-grid="2">2</button>
-                        <button class="grid-btn" data-grid="4">4</button>
                     </div>
                     <button class="shuffle-btn" id="shuffleBtn" onclick="toggleShuffle()">
                         <span>🔀</span> Shuffle: <span id="shuffleStatus">Off</span>
                     </button>
                     <button class="reset-btn" onclick="resetTodayProgress()">
-                        <span>↺</span> Reset Today
+                        <span>↺</span> Reset
                     </button>
                 </div>
 
@@ -1396,13 +1502,20 @@
 
             <!-- Review Mode -->
             <div id="reviewMode" style="display: none;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
                     <div class="progress-info" style="margin-bottom: 0;">
                         <span id="reviewDueCount">0</span> words in review
                     </div>
-                    <button class="reset-btn danger" onclick="resetAllProgress()">
-                        <span>⚠</span> Reset All Progress
-                    </button>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div class="grid-selector" id="gridSelector" style="margin-bottom: 0;">
+                            <button class="grid-btn active" data-grid="1">1</button>
+                            <button class="grid-btn" data-grid="2">2</button>
+                            <button class="grid-btn" data-grid="4">4</button>
+                        </div>
+                        <button class="reset-btn danger" onclick="resetAllProgress()">
+                            <span>⚠</span> Reset All
+                        </button>
+                    </div>
                 </div>
 
                 <div id="reviewContent">
@@ -1776,7 +1889,6 @@
 
         function updateDailyGoalDisplay() {
             const learned = getTodayNewLearned();
-            const queueRemaining = getDailyQueueWords().length;
             const percent = dailyGoal > 0 ? Math.min(100, (learned / dailyGoal) * 100) : 0;
             const goalReached = learned >= dailyGoal;
 
@@ -1784,16 +1896,13 @@
             document.getElementById('dailyGoalDisplay').textContent = dailyGoal;
             document.getElementById('dailyGoalFill').style.width = percent + '%';
 
-            // Update goal card styling when goal is reached
-            const goalCard = document.querySelector('.daily-goal-card');
-            const goalTitle = document.querySelector('.daily-goal-title');
-            if (goalCard && goalTitle) {
+            // Update inline goal styling when goal is reached
+            const goalInline = document.querySelector('.daily-goal-inline');
+            if (goalInline) {
                 if (goalReached) {
-                    goalCard.style.background = 'linear-gradient(135deg, var(--success) 0%, var(--success-light) 100%)';
-                    goalTitle.textContent = '🎉 Daily Goal Complete!';
+                    goalInline.style.background = 'linear-gradient(135deg, var(--success) 0%, var(--success-light) 100%)';
                 } else {
-                    goalCard.style.background = 'linear-gradient(135deg, var(--secondary) 0%, var(--secondary-light) 100%)';
-                    goalTitle.textContent = `Daily Goal (${dailyGoal - learned} remaining)`;
+                    goalInline.style.background = 'linear-gradient(135deg, var(--secondary) 0%, var(--secondary-light) 100%)';
                 }
             }
         }
@@ -1891,13 +2000,6 @@
 
                 return `
                     <div class="card-wrapper" data-card-index="${idx}">
-                        <div style="text-align: center;">
-                            <div class="stack-indicator">
-                                <div class="stack-dot" style="background: var(--secondary);"></div>
-                                New Word
-                            </div>
-                        </div>
-
                         <div class="flashcard-container">
                             <div class="flashcard" id="flashcard-${idx}" onclick="flipCardAt(${idx})">
                                 <div class="flashcard-face flashcard-front">
@@ -2112,11 +2214,6 @@
             }).join('');
 
             return `
-                <div class="grid-selector" style="margin-bottom: 16px;">
-                    <button class="grid-btn ${gridSize === 1 ? 'active' : ''}" onclick="setGridSize(1)">1</button>
-                    <button class="grid-btn ${gridSize === 2 ? 'active' : ''}" onclick="setGridSize(2)">2</button>
-                    <button class="grid-btn ${gridSize === 4 ? 'active' : ''}" onclick="setGridSize(4)">4</button>
-                </div>
                 <div class="flashcard-grid grid-${gridSize}">
                     ${cardsHtml}
                 </div>
@@ -2156,6 +2253,12 @@
         function setGridSize(size) {
             gridSize = size;
             localStorage.setItem('gre-vocab-gridSize', size);
+
+            // Update button active states
+            document.querySelectorAll('.grid-btn').forEach(btn => {
+                btn.classList.toggle('active', parseInt(btn.dataset.grid) === size);
+            });
+
             if (currentMode === 'daily') {
                 renderDailyLearn();
             } else {
@@ -2414,28 +2517,47 @@
         }
 
         // ============================================
-        // Navigation
+        // Navigation (Hamburger Menu)
         // ============================================
-        document.querySelectorAll('.nav-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const view = btn.dataset.view;
+        function toggleMenu() {
+            const btn = document.getElementById('hamburgerBtn');
+            const menu = document.getElementById('hamburgerMenu');
+            btn.classList.toggle('active');
+            menu.classList.toggle('show');
+        }
 
-                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-
-                document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-                document.getElementById(view + 'View').classList.add('active');
-
-                if (view === 'learn') {
-                    if (currentMode === 'daily') {
-                        renderDailyLearn();
-                    } else {
-                        renderReviewMode();
-                    }
-                }
-                if (view === 'quiz') renderQuiz();
-                if (view === 'progress') renderProgress();
+        function selectView(view) {
+            // Update menu items
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.toggle('active', item.dataset.view === view);
             });
+
+            // Close menu
+            document.getElementById('hamburgerBtn').classList.remove('active');
+            document.getElementById('hamburgerMenu').classList.remove('show');
+
+            // Switch view
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById(view + 'View').classList.add('active');
+
+            if (view === 'learn') {
+                if (currentMode === 'daily') {
+                    renderDailyLearn();
+                } else {
+                    renderReviewMode();
+                }
+            }
+            if (view === 'quiz') renderQuiz();
+            if (view === 'progress') renderProgress();
+        }
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            const container = document.querySelector('.hamburger-container');
+            if (!container.contains(e.target)) {
+                document.getElementById('hamburgerBtn').classList.remove('active');
+                document.getElementById('hamburgerMenu').classList.remove('show');
+            }
         });
 
         // Mode tab event listeners
