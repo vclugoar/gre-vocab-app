@@ -550,6 +550,70 @@
             color: var(--text-dark);
         }
 
+        /* Data Backup Section */
+        .data-backup-section {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 24px;
+            margin-top: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+
+        .backup-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+        }
+
+        .backup-desc {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .backup-actions {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .backup-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 12px;
+            border: none;
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .backup-btn.export {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+        }
+
+        .backup-btn.export:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
+        }
+
+        .backup-btn.import {
+            background: rgba(0, 0, 0, 0.05);
+            color: var(--text-dark);
+        }
+
+        .backup-btn.import:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
         /* Empty state */
         .empty-state {
             text-align: center;
@@ -1945,6 +2009,20 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="data-backup-section">
+                    <div class="backup-title">Backup & Sync</div>
+                    <div class="backup-desc">Export your progress to transfer to another device</div>
+                    <div class="backup-actions">
+                        <button class="backup-btn export" onclick="exportData()">
+                            <span>📤</span> Export Data
+                        </button>
+                        <button class="backup-btn import" onclick="document.getElementById('importFile').click()">
+                            <span>📥</span> Import Data
+                        </button>
+                    </div>
+                    <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(this)">
+                </div>
             </div>
         </div>
     </main>
@@ -2806,6 +2884,85 @@
         function handleLearning() { handleReviewLearningAt(0); }
         function handleKnowAt(idx) { handleReviewKnowAt(idx); }
         function handleLearningAt(idx) { handleReviewLearningAt(idx); }
+
+        // ============================================
+        // Export/Import Functions
+        // ============================================
+        function exportData() {
+            const data = {
+                version: 1,
+                exportDate: new Date().toISOString(),
+                progress: progress,
+                stats: stats,
+                settings: {
+                    dailyGoal: dailyGoal,
+                    shuffleEnabled: shuffleEnabled,
+                    gridSize: gridSize
+                }
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            const date = new Date().toISOString().split('T')[0];
+            a.download = `lexica-backup-${date}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            alert('✅ Data exported successfully! Save this file to import on another device.');
+        }
+
+        function importData(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+
+                    // Validate data structure
+                    if (!data.progress || !data.stats) {
+                        alert('❌ Invalid backup file. Please select a valid Lexica backup.');
+                        return;
+                    }
+
+                    if (!confirm('⚠️ Import this backup? This will replace all your current progress.')) {
+                        input.value = '';
+                        return;
+                    }
+
+                    // Import progress
+                    progress = data.progress;
+                    stats = data.stats;
+
+                    // Import settings if available
+                    if (data.settings) {
+                        dailyGoal = data.settings.dailyGoal || 10;
+                        shuffleEnabled = data.settings.shuffleEnabled || false;
+                        gridSize = data.settings.gridSize || 1;
+                        localStorage.setItem('gre-vocab-dailyGoal', dailyGoal);
+                        localStorage.setItem('gre-vocab-shuffle', shuffleEnabled);
+                        localStorage.setItem('gre-vocab-gridSize', gridSize);
+                    }
+
+                    // Save imported data
+                    saveProgress();
+                    saveStats();
+
+                    alert('✅ Data imported successfully! The page will now reload.');
+                    location.reload();
+
+                } catch (error) {
+                    alert('❌ Error reading file. Please make sure it\'s a valid Lexica backup.');
+                }
+            };
+            reader.readAsText(file);
+            input.value = '';
+        }
 
         // ============================================
         // Quiz Mode
