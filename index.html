@@ -1,0 +1,2397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GRE Vocab Master</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #7C3AED;
+            --primary-light: #A78BFA;
+            --primary-dark: #5B21B6;
+            --secondary: #F97316;
+            --secondary-light: #FB923C;
+            --success: #10B981;
+            --success-light: #34D399;
+            --error: #F43F5E;
+            --error-light: #FB7185;
+            --bg-gradient: linear-gradient(135deg, #F5F3FF 0%, #EDE9FE 50%, #FDF4FF 100%);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-dark: #1F2937;
+            --text-muted: #6B7280;
+            --border: #E5E7EB;
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--bg-gradient);
+            font-family: 'Inter', sans-serif;
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Outfit', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .streak-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-light) 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+        }
+
+        /* Navigation */
+        .nav {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--card-bg);
+            color: var(--text-muted);
+            border: 2px solid transparent;
+        }
+
+        .nav-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4);
+        }
+
+        /* Main Container */
+        .main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* View containers */
+        .view {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Flashcard */
+        .flashcard-container {
+            perspective: 1000px;
+            margin-bottom: 24px;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 350px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s ease;
+            cursor: pointer;
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 24px;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        }
+
+        .flashcard-front {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+        .flashcard-back {
+            background: var(--card-bg);
+            transform: rotateY(180deg);
+            text-align: left;
+            justify-content: flex-start;
+            overflow-y: auto;
+        }
+
+        .flashcard-word {
+            font-family: 'Outfit', sans-serif;
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .flashcard-hint {
+            font-size: 16px;
+            opacity: 0.8;
+        }
+
+        .flashcard-definition {
+            font-size: 20px;
+            line-height: 1.6;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+        }
+
+        .flashcard-section-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            margin-top: 16px;
+        }
+
+        .mnemonic-list {
+            list-style: none;
+        }
+
+        .mnemonic-item {
+            background: linear-gradient(135deg, #F5F3FF 0%, #FDF4FF 100%);
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--text-dark);
+            border-left: 4px solid var(--primary);
+        }
+
+        /* Flashcard Actions */
+        .flashcard-actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        .action-btn {
+            flex: 1;
+            max-width: 200px;
+            padding: 16px 32px;
+            border: none;
+            border-radius: 16px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .action-btn.know {
+            background: linear-gradient(135deg, var(--success) 0%, var(--success-light) 100%);
+            color: white;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .action-btn.know:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.5);
+        }
+
+        .action-btn.learning {
+            background: linear-gradient(135deg, var(--error) 0%, var(--error-light) 100%);
+            color: white;
+            box-shadow: 0 4px 20px rgba(244, 63, 94, 0.4);
+        }
+
+        .action-btn.learning:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(244, 63, 94, 0.5);
+        }
+
+        /* Progress info */
+        .progress-info {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .progress-info strong {
+            color: var(--primary);
+        }
+
+        /* Stack indicator */
+        .stack-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--card-bg);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .stack-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .stack-1 { background: var(--error); }
+        .stack-2 { background: var(--secondary); }
+        .stack-3 { background: #FBBF24; }
+        .stack-4 { background: var(--success); }
+
+        /* Quiz Mode */
+        .quiz-question {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        }
+
+        .quiz-prompt {
+            font-size: 14px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .quiz-definition {
+            font-family: 'Outfit', sans-serif;
+            font-size: 24px;
+            font-weight: 600;
+            line-height: 1.5;
+            color: var(--text-dark);
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .quiz-option {
+            padding: 20px 24px;
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            background: var(--card-bg);
+            font-family: 'Outfit', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .quiz-option:hover:not(.disabled) {
+            border-color: var(--primary);
+            background: #F5F3FF;
+            transform: translateY(-2px);
+        }
+
+        .quiz-option.correct {
+            background: linear-gradient(135deg, var(--success) 0%, var(--success-light) 100%);
+            border-color: var(--success);
+            color: white;
+        }
+
+        .quiz-option.wrong {
+            background: linear-gradient(135deg, var(--error) 0%, var(--error-light) 100%);
+            border-color: var(--error);
+            color: white;
+        }
+
+        .quiz-option.disabled {
+            cursor: default;
+            opacity: 0.7;
+        }
+
+        .quiz-feedback {
+            text-align: center;
+            padding: 20px;
+            margin-top: 16px;
+            border-radius: 16px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            display: none;
+        }
+
+        .quiz-feedback.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .quiz-feedback.correct {
+            background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+            color: var(--success);
+        }
+
+        .quiz-feedback.wrong {
+            background: linear-gradient(135deg, #FEF2F2 0%, #FECACA 100%);
+            color: var(--error);
+        }
+
+        .quiz-next {
+            display: none;
+            margin: 20px auto 0;
+            padding: 16px 48px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .quiz-next.show {
+            display: block;
+        }
+
+        .quiz-next:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(124, 58, 237, 0.5);
+        }
+
+        .quiz-score {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: var(--text-muted);
+        }
+
+        .quiz-score strong {
+            color: var(--primary);
+            font-size: 24px;
+        }
+
+        /* Progress Dashboard */
+        .dashboard {
+            display: grid;
+            gap: 20px;
+        }
+
+        .stat-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 24px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .stat-value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 36px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .stack-breakdown {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        .breakdown-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+        }
+
+        .stack-bar {
+            display: flex;
+            height: 24px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 16px;
+            background: var(--border);
+        }
+
+        .stack-segment {
+            transition: width 0.5s ease;
+        }
+
+        .stack-segment.s1 { background: linear-gradient(135deg, var(--error) 0%, var(--error-light) 100%); }
+        .stack-segment.s2 { background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-light) 100%); }
+        .stack-segment.s3 { background: linear-gradient(135deg, #FBBF24 0%, #FCD34D 100%); }
+        .stack-segment.s4 { background: linear-gradient(135deg, var(--success) 0%, var(--success-light) 100%); }
+
+        .stack-legend {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .legend-count {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .empty-state-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .empty-state-text {
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .start-btn {
+            padding: 16px 48px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(124, 58, 237, 0.5);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .nav {
+                padding: 12px;
+            }
+
+            .nav-btn {
+                padding: 12px 16px;
+                font-size: 14px;
+            }
+
+            .flashcard {
+                height: 300px;
+            }
+
+            .flashcard-word {
+                font-size: 36px;
+            }
+
+            .flashcard-definition {
+                font-size: 18px;
+            }
+
+            .quiz-options {
+                grid-template-columns: 1fr;
+            }
+
+            .flashcard-actions {
+                flex-direction: column;
+            }
+
+            .action-btn {
+                max-width: 100%;
+            }
+
+            .stat-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .stack-legend {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Confetti animation */
+        @keyframes confetti {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        .confetti-piece {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            top: -10px;
+            animation: confetti 3s ease-out forwards;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        /* Grid Selector */
+        .grid-selector {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            margin-bottom: 20px;
+        }
+
+        .grid-btn {
+            padding: 8px 20px;
+            border: 2px solid var(--border);
+            background: var(--card-bg);
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .grid-btn:first-child {
+            border-radius: 20px 0 0 20px;
+        }
+
+        .grid-btn:last-child {
+            border-radius: 0 20px 20px 0;
+        }
+
+        .grid-btn:hover {
+            border-color: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .grid-btn.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        /* Flashcard Grid Layout */
+        .flashcard-grid {
+            display: grid;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .flashcard-grid.grid-1 {
+            grid-template-columns: 1fr;
+        }
+
+        .flashcard-grid.grid-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .flashcard-grid.grid-4 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        /* Compact card for grid view */
+        .flashcard-grid .card-wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .flashcard-grid .flashcard-container {
+            margin-bottom: 12px;
+        }
+
+        .flashcard-grid.grid-2 .flashcard,
+        .flashcard-grid.grid-4 .flashcard {
+            height: 220px;
+        }
+
+        .flashcard-grid.grid-2 .flashcard-word,
+        .flashcard-grid.grid-4 .flashcard-word {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .flashcard-grid.grid-2 .flashcard-hint,
+        .flashcard-grid.grid-4 .flashcard-hint {
+            font-size: 12px;
+        }
+
+        .flashcard-grid.grid-2 .flashcard-face,
+        .flashcard-grid.grid-4 .flashcard-face {
+            padding: 20px;
+        }
+
+        .flashcard-grid.grid-2 .flashcard-definition,
+        .flashcard-grid.grid-4 .flashcard-definition {
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .flashcard-grid.grid-2 .flashcard-section-title,
+        .flashcard-grid.grid-4 .flashcard-section-title {
+            font-size: 11px;
+            margin-bottom: 8px;
+            margin-top: 8px;
+        }
+
+        .flashcard-grid.grid-2 .mnemonic-item,
+        .flashcard-grid.grid-4 .mnemonic-item {
+            padding: 8px 10px;
+            font-size: 11px;
+            margin-bottom: 4px;
+        }
+
+        .flashcard-grid.grid-2 .stack-indicator,
+        .flashcard-grid.grid-4 .stack-indicator {
+            font-size: 11px;
+            padding: 4px 10px;
+            margin-bottom: 8px;
+        }
+
+        .flashcard-grid.grid-2 .stack-dot,
+        .flashcard-grid.grid-4 .stack-dot {
+            width: 8px;
+            height: 8px;
+        }
+
+        /* Compact action buttons for grid */
+        .flashcard-grid .card-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .flashcard-grid.grid-2 .card-actions .action-btn,
+        .flashcard-grid.grid-4 .card-actions .action-btn {
+            padding: 10px 16px;
+            font-size: 12px;
+            max-width: none;
+            flex: 1;
+        }
+
+        .flashcard-grid.grid-2 .card-actions .action-btn span,
+        .flashcard-grid.grid-4 .card-actions .action-btn span {
+            display: none;
+        }
+
+        .flashcard-grid.grid-2 .stack-selector-wrapper,
+        .flashcard-grid.grid-4 .stack-selector-wrapper {
+            padding: 6px 8px;
+        }
+
+        .flashcard-grid.grid-2 .stack-selector-label,
+        .flashcard-grid.grid-4 .stack-selector-label {
+            font-size: 10px;
+        }
+
+        .flashcard-grid.grid-2 .stack-selector,
+        .flashcard-grid.grid-4 .stack-selector {
+            font-size: 10px;
+            padding: 2px 4px;
+        }
+
+        /* Responsive grid adjustments */
+        @media (max-width: 600px) {
+            .flashcard-grid.grid-2,
+            .flashcard-grid.grid-4 {
+                grid-template-columns: 1fr;
+            }
+
+            .flashcard-grid.grid-2 .flashcard,
+            .flashcard-grid.grid-4 .flashcard {
+                height: 280px;
+            }
+
+            .flashcard-grid.grid-2 .flashcard-word,
+            .flashcard-grid.grid-4 .flashcard-word {
+                font-size: 32px;
+            }
+        }
+
+        /* Mode Tabs (Daily Learn / Review) */
+        .mode-tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 20px;
+            background: var(--card-bg);
+            padding: 6px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .mode-tab {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: transparent;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .mode-tab:hover {
+            color: var(--primary);
+        }
+
+        .mode-tab.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+        }
+
+        .mode-tab .badge {
+            background: rgba(255,255,255,0.25);
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .mode-tab:not(.active) .badge {
+            background: var(--border);
+            color: var(--text-dark);
+        }
+
+        /* Daily Goal Settings */
+        .daily-goal-card {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-light) 100%);
+            border-radius: 20px;
+            padding: 20px 24px;
+            margin-bottom: 20px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(249, 115, 22, 0.3);
+        }
+
+        .daily-goal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .daily-goal-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .daily-goal-edit {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            padding: 6px 12px;
+            border-radius: 20px;
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .daily-goal-edit:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .daily-goal-progress {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .daily-goal-bar {
+            flex: 1;
+            height: 12px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .daily-goal-fill {
+            height: 100%;
+            background: white;
+            border-radius: 6px;
+            transition: width 0.5s ease;
+        }
+
+        .daily-goal-text {
+            font-family: 'Outfit', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        /* Goal Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            padding: 32px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .modal-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+        }
+
+        .modal-subtitle {
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            font-size: 14px;
+        }
+
+        .goal-slider {
+            width: 100%;
+            margin-bottom: 16px;
+        }
+
+        .goal-value {
+            text-align: center;
+            font-family: 'Outfit', sans-serif;
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .goal-label {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .modal-btn.cancel {
+            background: var(--border);
+            color: var(--text-dark);
+        }
+
+        .modal-btn.save {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Review Stack Sections */
+        .review-section {
+            margin-bottom: 24px;
+        }
+
+        .review-stack-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding: 16px 20px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .review-stack-header:hover {
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+        }
+
+        .review-stack-header.stack-1-header { border-left: 4px solid var(--error); }
+        .review-stack-header.stack-2-header { border-left: 4px solid var(--secondary); }
+        .review-stack-header.stack-3-header { border-left: 4px solid #FBBF24; }
+        .review-stack-header.stack-4-header { border-left: 4px solid var(--success); }
+
+        .review-stack-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .stack-1-header .review-stack-icon { background: linear-gradient(135deg, var(--error) 0%, var(--error-light) 100%); }
+        .stack-2-header .review-stack-icon { background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-light) 100%); }
+        .stack-3-header .review-stack-icon { background: linear-gradient(135deg, #FBBF24 0%, #FCD34D 100%); }
+        .stack-4-header .review-stack-icon { background: linear-gradient(135deg, var(--success) 0%, var(--success-light) 100%); }
+
+        .review-stack-info {
+            flex: 1;
+        }
+
+        .review-stack-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .review-stack-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .review-stack-count {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .review-stack-badge {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .stack-1-header .review-stack-badge { background: #FEE2E2; color: var(--error); }
+        .stack-2-header .review-stack-badge { background: #FFEDD5; color: var(--secondary); }
+        .stack-3-header .review-stack-badge { background: #FEF3C7; color: #D97706; }
+        .stack-4-header .review-stack-badge { background: #D1FAE5; color: var(--success); }
+
+        .review-stack-arrow {
+            font-size: 20px;
+            color: var(--text-muted);
+            transition: transform 0.2s ease;
+        }
+
+        .review-stack-header.expanded .review-stack-arrow {
+            transform: rotate(180deg);
+        }
+
+        .review-stack-content {
+            display: none;
+            padding-left: 20px;
+        }
+
+        .review-stack-content.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* Completed State */
+        .daily-complete {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+
+        .daily-complete-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+
+        .daily-complete-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--success);
+            margin-bottom: 8px;
+        }
+
+        .daily-complete-text {
+            color: var(--text-muted);
+        }
+
+        /* Shuffle Button */
+        .shuffle-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            background: var(--card-bg);
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .shuffle-btn:hover {
+            border-color: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .shuffle-btn.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        /* Stack Selector Dropdown */
+        .stack-selector {
+            padding: 4px 8px;
+            border: none;
+            border-radius: 6px;
+            background: transparent;
+            font-family: 'Outfit', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-dark);
+            cursor: pointer;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .stack-selector:hover {
+            background: rgba(124, 58, 237, 0.1);
+        }
+
+        .stack-selector:focus {
+            background: rgba(124, 58, 237, 0.1);
+        }
+
+        /* Stack Selector in Action Bar */
+        .stack-selector-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--card-bg);
+            padding: 8px 12px;
+            border-radius: 12px;
+            border: 2px solid var(--border);
+        }
+
+        .stack-selector-label {
+            font-family: 'Outfit', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        /* Reset Buttons */
+        .reset-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: rgba(0,0,0,0.05);
+            color: var(--text-muted);
+        }
+
+        .reset-btn:hover {
+            background: rgba(244, 63, 94, 0.1);
+            color: var(--error);
+        }
+
+        .reset-btn.danger {
+            background: rgba(244, 63, 94, 0.1);
+            color: var(--error);
+        }
+
+        .reset-btn.danger:hover {
+            background: var(--error);
+            color: white;
+        }
+
+        .reset-actions {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 16px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">GRE Vocab Master</div>
+            <div class="streak-badge" id="streakBadge">
+                <span>🔥</span>
+                <span id="streakCount">0</span> day streak
+            </div>
+        </div>
+    </header>
+
+    <nav class="nav">
+        <button class="nav-btn active" data-view="learn">Learn</button>
+        <button class="nav-btn" data-view="quiz">Quiz</button>
+        <button class="nav-btn" data-view="progress">Progress</button>
+    </nav>
+
+    <main class="main">
+        <!-- Learn View -->
+        <div class="view active" id="learnView">
+            <!-- Mode Tabs -->
+            <div class="mode-tabs">
+                <button class="mode-tab active" data-mode="daily">
+                    Daily Learn <span class="badge" id="dailyBadge">0</span>
+                </button>
+                <button class="mode-tab" data-mode="review">
+                    Review <span class="badge" id="reviewBadge">0</span>
+                </button>
+            </div>
+
+            <!-- Daily Learn Mode -->
+            <div id="dailyLearnMode">
+                <div class="daily-goal-card">
+                    <div class="daily-goal-header">
+                        <div class="daily-goal-title">Daily Goal</div>
+                        <button class="daily-goal-edit" onclick="openGoalModal()">Edit Goal</button>
+                    </div>
+                    <div class="daily-goal-progress">
+                        <div class="daily-goal-bar">
+                            <div class="daily-goal-fill" id="dailyGoalFill" style="width: 0%"></div>
+                        </div>
+                        <div class="daily-goal-text"><span id="dailyLearnedCount">0</span> / <span id="dailyGoalDisplay">10</span></div>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap;">
+                    <div class="grid-selector" id="gridSelector" style="margin-bottom: 0;">
+                        <button class="grid-btn active" data-grid="1">1</button>
+                        <button class="grid-btn" data-grid="2">2</button>
+                        <button class="grid-btn" data-grid="4">4</button>
+                    </div>
+                    <button class="shuffle-btn" id="shuffleBtn" onclick="toggleShuffle()">
+                        <span>🔀</span> Shuffle: <span id="shuffleStatus">Off</span>
+                    </button>
+                    <button class="reset-btn" onclick="resetTodayProgress()">
+                        <span>↺</span> Reset Today
+                    </button>
+                </div>
+
+                <div id="dailyLearnContent">
+                    <!-- Daily flashcards will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Review Mode -->
+            <div id="reviewMode" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                    <div class="progress-info" style="margin-bottom: 0;">
+                        <span id="reviewDueCount">0</span> words in review
+                    </div>
+                    <button class="reset-btn danger" onclick="resetAllProgress()">
+                        <span>⚠</span> Reset All Progress
+                    </button>
+                </div>
+
+                <div id="reviewContent">
+                    <!-- Review stack sections will be inserted here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Goal Modal -->
+        <div class="modal-overlay" id="goalModal">
+            <div class="modal-content">
+                <div class="modal-title">Set Daily Goal</div>
+                <div class="modal-subtitle">How many new words do you want to learn each day?</div>
+                <div class="goal-value" id="goalSliderValue">10</div>
+                <div class="goal-label">words per day</div>
+                <input type="range" min="7" max="21" value="10" class="goal-slider" id="goalSlider" oninput="updateGoalSlider(this.value)">
+                <div class="modal-actions">
+                    <button class="modal-btn cancel" onclick="closeGoalModal()">Cancel</button>
+                    <button class="modal-btn save" onclick="saveGoal()">Save Goal</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz View -->
+        <div class="view" id="quizView">
+            <div class="quiz-score">
+                Score: <strong><span id="quizCorrect">0</span></strong> / <span id="quizTotal">0</span>
+            </div>
+
+            <div id="quizContent">
+                <!-- Quiz will be inserted here -->
+            </div>
+        </div>
+
+        <!-- Progress View -->
+        <div class="view" id="progressView">
+            <div class="dashboard">
+                <div class="stat-cards">
+                    <div class="stat-card">
+                        <div class="stat-icon">📚</div>
+                        <div class="stat-value" id="totalWords">0</div>
+                        <div class="stat-label">Total Words</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-value" id="masteredWords">0</div>
+                        <div class="stat-label">Mastered</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📅</div>
+                        <div class="stat-value" id="todayReviewed">0</div>
+                        <div class="stat-label">Reviewed Today</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🎯</div>
+                        <div class="stat-value" id="masteryPercent">0%</div>
+                        <div class="stat-label">Mastery</div>
+                    </div>
+                </div>
+
+                <div class="stack-breakdown">
+                    <div class="breakdown-title">Stack Breakdown</div>
+                    <div class="stack-bar" id="stackBar">
+                        <div class="stack-segment s1" style="width: 25%"></div>
+                        <div class="stack-segment s2" style="width: 25%"></div>
+                        <div class="stack-segment s3" style="width: 25%"></div>
+                        <div class="stack-segment s4" style="width: 25%"></div>
+                    </div>
+                    <div class="stack-legend">
+                        <div class="legend-item">
+                            <div class="legend-dot stack-1"></div>
+                            <span>Stack 1: <span class="legend-count" id="stack1Count">0</span></span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot stack-2"></div>
+                            <span>Stack 2: <span class="legend-count" id="stack2Count">0</span></span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot stack-3"></div>
+                            <span>Stack 3: <span class="legend-count" id="stack3Count">0</span></span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot stack-4"></div>
+                            <span>Stack 4: <span class="legend-count" id="stack4Count">0</span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="vocab-data.js"></script>
+    <script>
+        // ============================================
+        // State Management
+        // ============================================
+        const STACK_INTERVALS = {
+            1: 1,      // Daily
+            2: 3,      // Every 3 days (twice a week roughly)
+            3: 7,      // Weekly
+            4: 14      // Biweekly
+        };
+
+        const STACK_LABELS = {
+            1: { title: 'Stack 1: Daily Review', desc: 'Review every day', icon: '🔴' },
+            2: { title: 'Stack 2: Twice Weekly', desc: 'Review every 3 days', icon: '🟠' },
+            3: { title: 'Stack 3: Weekly', desc: 'Review once a week', icon: '🟡' },
+            4: { title: 'Stack 4: Biweekly', desc: 'Review every two weeks', icon: '🟢' }
+        };
+
+        let progress = JSON.parse(localStorage.getItem('gre-vocab-progress')) || {};
+        let stats = JSON.parse(localStorage.getItem('gre-vocab-stats')) || {
+            streak: 0,
+            lastStudyDate: null,
+            todayReviewed: 0,
+            todayDate: null,
+            todayNewLearned: 0,
+            todayNewLearnedDate: null
+        };
+
+        let dailyGoal = parseInt(localStorage.getItem('gre-vocab-dailyGoal')) || 10;
+        let shuffleEnabled = localStorage.getItem('gre-vocab-shuffle') === 'true';
+        let dailyQueue = []; // Queue of words for today's learning session
+        let dailyQueueInitialized = false;
+        let currentMode = 'daily'; // 'daily' or 'review'
+        let currentCard = null;
+        let currentCards = [];
+        let activeReviewStack = null;
+        let quizScore = { correct: 0, total: 0 };
+        let currentQuizWord = null;
+        let gridSize = parseInt(localStorage.getItem('gre-vocab-gridSize')) || 1;
+
+        // Initialize progress for all words
+        function initProgress() {
+            VOCAB_DATA.forEach((word, index) => {
+                if (!progress[index]) {
+                    progress[index] = {
+                        stack: 0, // 0 = never learned, 1-4 = in review system
+                        lastReviewed: null,
+                        timesCorrect: 0,
+                        timesWrong: 0
+                    };
+                }
+            });
+            saveProgress();
+        }
+
+        function saveProgress() {
+            localStorage.setItem('gre-vocab-progress', JSON.stringify(progress));
+        }
+
+        function saveStats() {
+            localStorage.setItem('gre-vocab-stats', JSON.stringify(stats));
+        }
+
+        // ============================================
+        // Word Classification
+        // ============================================
+        function getAllNewWords() {
+            // All words that have never been reviewed (lastReviewed is null)
+            return VOCAB_DATA.map((word, index) => ({ word, index }))
+                .filter(item => {
+                    const p = progress[item.index];
+                    return p.lastReviewed === null;
+                });
+        }
+
+        function initDailyQueue() {
+            // Get all unlearned words
+            let allNew = getAllNewWords();
+
+            // Apply shuffle if enabled
+            if (shuffleEnabled && allNew.length > 0) {
+                allNew = shuffleArray([...allNew]);
+            }
+
+            // Limit to daily goal
+            dailyQueue = allNew.slice(0, dailyGoal);
+            dailyQueueInitialized = true;
+        }
+
+        function getDailyQueueWords() {
+            // Initialize queue if not done yet
+            if (!dailyQueueInitialized) {
+                initDailyQueue();
+            }
+            return dailyQueue;
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function toggleShuffle() {
+            shuffleEnabled = !shuffleEnabled;
+            localStorage.setItem('gre-vocab-shuffle', shuffleEnabled);
+            updateShuffleButton();
+            // Re-initialize queue with new shuffle setting
+            dailyQueueInitialized = false;
+            renderDailyLearn();
+        }
+
+        function updateShuffleButton() {
+            const btn = document.getElementById('shuffleBtn');
+            const status = document.getElementById('shuffleStatus');
+            if (btn && status) {
+                btn.classList.toggle('active', shuffleEnabled);
+                status.textContent = shuffleEnabled ? 'On' : 'Off';
+            }
+        }
+
+        function getReviewWords() {
+            // Words that have been reviewed at least once and are due
+            return VOCAB_DATA.map((word, index) => ({ word, index }))
+                .filter(item => {
+                    const p = progress[item.index];
+                    if (p.lastReviewed === null) return false; // Not learned yet
+                    return isDue(item.index);
+                });
+        }
+
+        function getWordsByStack(stackNum, onlyDue = false) {
+            return VOCAB_DATA.map((word, index) => ({ word, index }))
+                .filter(item => {
+                    const p = progress[item.index];
+                    if (p.lastReviewed === null) return false;
+                    if (p.stack !== stackNum) return false;
+                    return onlyDue ? isDue(item.index) : true;
+                });
+        }
+
+        function getDaysUntilDue(wordIndex) {
+            const wordProgress = progress[wordIndex];
+            if (!wordProgress.lastReviewed) return 0;
+
+            const lastReview = new Date(wordProgress.lastReviewed);
+            const now = new Date();
+            const daysSince = Math.floor((now - lastReview) / (1000 * 60 * 60 * 24));
+            const interval = STACK_INTERVALS[wordProgress.stack] || 1;
+            const daysUntil = interval - daysSince;
+
+            return Math.max(0, daysUntil);
+        }
+
+        function moveToStack(wordIndex, stackNum) {
+            progress[wordIndex].stack = parseInt(stackNum);
+            saveProgress();
+            renderReviewMode();
+        }
+
+        function getTodayNewLearned() {
+            const today = new Date().toISOString().split('T')[0];
+            if (stats.todayNewLearnedDate !== today) {
+                stats.todayNewLearned = 0;
+                stats.todayNewLearnedDate = today;
+                // Reset queue for new day
+                dailyQueueInitialized = false;
+                saveStats();
+            }
+            return stats.todayNewLearned;
+        }
+
+        // ============================================
+        // Spaced Repetition Logic
+        // ============================================
+        function isDue(wordIndex) {
+            const wordProgress = progress[wordIndex];
+            if (!wordProgress.lastReviewed) return false; // Never learned, not due for review
+
+            const lastReview = new Date(wordProgress.lastReviewed);
+            const now = new Date();
+            const daysSince = Math.floor((now - lastReview) / (1000 * 60 * 60 * 24));
+            const interval = STACK_INTERVALS[wordProgress.stack] || 1;
+
+            return daysSince >= interval;
+        }
+
+        function learnNewWord(wordIndex) {
+            const p = progress[wordIndex];
+            p.stack = 1; // Move to stack 1
+            p.timesCorrect++;
+            p.lastReviewed = new Date().toISOString();
+
+            // Update daily new words count
+            const today = new Date().toISOString().split('T')[0];
+            if (stats.todayNewLearnedDate !== today) {
+                stats.todayNewLearned = 0;
+                stats.todayNewLearnedDate = today;
+            }
+            stats.todayNewLearned++;
+
+            updateTodayStats();
+            saveProgress();
+            saveStats();
+        }
+
+        function moveUp(wordIndex) {
+            const p = progress[wordIndex];
+            if (p.stack < 4) p.stack++;
+            p.timesCorrect++;
+            p.lastReviewed = new Date().toISOString();
+            updateTodayStats();
+            saveProgress();
+        }
+
+        function moveDown(wordIndex) {
+            const p = progress[wordIndex];
+            p.stack = 1;
+            p.timesWrong++;
+            p.lastReviewed = new Date().toISOString();
+            updateTodayStats();
+            saveProgress();
+        }
+
+        function updateTodayStats() {
+            const today = new Date().toISOString().split('T')[0];
+
+            if (stats.todayDate !== today) {
+                if (stats.lastStudyDate) {
+                    const lastDate = new Date(stats.lastStudyDate);
+                    const todayDate = new Date(today);
+                    const diffDays = Math.floor((todayDate - lastDate) / (1000 * 60 * 60 * 24));
+
+                    if (diffDays === 1) {
+                        stats.streak++;
+                    } else if (diffDays > 1) {
+                        stats.streak = 1;
+                    }
+                } else {
+                    stats.streak = 1;
+                }
+
+                stats.todayReviewed = 0;
+                stats.todayDate = today;
+            }
+
+            stats.todayReviewed++;
+            stats.lastStudyDate = today;
+            saveStats();
+            updateStreakDisplay();
+        }
+
+        // ============================================
+        // UI Updates
+        // ============================================
+        function updateStreakDisplay() {
+            document.getElementById('streakCount').textContent = stats.streak;
+        }
+
+        function updateBadges() {
+            const queueCount = getDailyQueueWords().length;
+            // Count all learned words (in any stack)
+            const learnedWords = VOCAB_DATA.filter((_, index) => progress[index].lastReviewed !== null).length;
+
+            document.getElementById('dailyBadge').textContent = queueCount;
+            document.getElementById('reviewBadge').textContent = learnedWords;
+        }
+
+        function updateDailyGoalDisplay() {
+            const learned = getTodayNewLearned();
+            const queueRemaining = getDailyQueueWords().length;
+            const percent = dailyGoal > 0 ? Math.min(100, (learned / dailyGoal) * 100) : 0;
+            const goalReached = learned >= dailyGoal;
+
+            document.getElementById('dailyLearnedCount').textContent = learned;
+            document.getElementById('dailyGoalDisplay').textContent = dailyGoal;
+            document.getElementById('dailyGoalFill').style.width = percent + '%';
+
+            // Update goal card styling when goal is reached
+            const goalCard = document.querySelector('.daily-goal-card');
+            const goalTitle = document.querySelector('.daily-goal-title');
+            if (goalCard && goalTitle) {
+                if (goalReached) {
+                    goalCard.style.background = 'linear-gradient(135deg, var(--success) 0%, var(--success-light) 100%)';
+                    goalTitle.textContent = '🎉 Daily Goal Complete!';
+                } else {
+                    goalCard.style.background = 'linear-gradient(135deg, var(--secondary) 0%, var(--secondary-light) 100%)';
+                    goalTitle.textContent = `Daily Goal (${dailyGoal - learned} remaining)`;
+                }
+            }
+        }
+
+        function switchMode(mode) {
+            currentMode = mode;
+
+            document.querySelectorAll('.mode-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.mode === mode);
+            });
+
+            document.getElementById('dailyLearnMode').style.display = mode === 'daily' ? 'block' : 'none';
+            document.getElementById('reviewMode').style.display = mode === 'review' ? 'block' : 'none';
+
+            if (mode === 'daily') {
+                renderDailyLearn();
+            } else {
+                renderReviewMode();
+            }
+        }
+
+        // ============================================
+        // Daily Learn Mode
+        // ============================================
+        function renderDailyLearn() {
+            const container = document.getElementById('dailyLearnContent');
+            const queueWords = getDailyQueueWords();
+
+            updateDailyGoalDisplay();
+            updateBadges();
+
+            // Update grid selector
+            document.querySelectorAll('.grid-btn').forEach(btn => {
+                btn.classList.toggle('active', parseInt(btn.dataset.grid) === gridSize);
+            });
+
+            // Check if all words have been learned (no new words left at all)
+            const allNewWords = getAllNewWords();
+            if (allNewWords.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📚</div>
+                        <div class="empty-state-title">All words learned!</div>
+                        <div class="empty-state-text">You've learned all ${VOCAB_DATA.length} vocabulary words. Switch to Review mode to practice.</div>
+                        <button class="start-btn" onclick="switchMode('review')">Go to Review</button>
+                    </div>
+                `;
+                return;
+            }
+
+            // Check if today's queue is complete
+            if (queueWords.length === 0) {
+                const learnedToday = getTodayNewLearned();
+                container.innerHTML = `
+                    <div class="daily-complete">
+                        <div class="daily-complete-icon">🎉</div>
+                        <div class="daily-complete-title">Daily Goal Complete!</div>
+                        <div class="daily-complete-text">You've learned ${learnedToday} new words today. Come back tomorrow for more!</div>
+                    </div>
+                    <div style="text-align: center; margin-top: 16px;">
+                        <button class="start-btn" onclick="switchMode('review')">Review Learned Words</button>
+                    </div>
+                `;
+                return;
+            }
+
+            // Get cards for current grid size
+            const cardsToShow = Math.min(gridSize, queueWords.length);
+            currentCards = queueWords.slice(0, cardsToShow);
+
+            // Build cards HTML
+            const cardsHtml = currentCards.map((cardData, idx) => {
+                const word = cardData.word;
+                const mnemonicsHtml = word.mnemonics.length > 0
+                    ? `<div class="flashcard-section-title">Memory Tricks</div>
+                       <ul class="mnemonic-list">
+                           ${word.mnemonics.map(m => `<li class="mnemonic-item">${m}</li>`).join('')}
+                       </ul>`
+                    : '';
+
+                return `
+                    <div class="card-wrapper" data-card-index="${idx}">
+                        <div style="text-align: center;">
+                            <div class="stack-indicator">
+                                <div class="stack-dot" style="background: var(--secondary);"></div>
+                                New Word
+                            </div>
+                        </div>
+
+                        <div class="flashcard-container">
+                            <div class="flashcard" id="flashcard-${idx}" onclick="flipCardAt(${idx})">
+                                <div class="flashcard-face flashcard-front">
+                                    <div class="flashcard-word">${word.word}</div>
+                                    <div class="flashcard-hint">Tap to reveal</div>
+                                </div>
+                                <div class="flashcard-face flashcard-back">
+                                    <div class="flashcard-section-title">Definition</div>
+                                    <div class="flashcard-definition">${word.definition}</div>
+                                    ${mnemonicsHtml}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-actions">
+                            <button class="action-btn learning" onclick="handleDailyLearningAt(${idx})">
+                                <span>🔄</span> Show Again
+                            </button>
+                            <button class="action-btn know" onclick="handleDailyKnowAt(${idx})">
+                                <span>✓</span> Got It
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            container.innerHTML = `
+                <div class="flashcard-grid grid-${gridSize}">
+                    ${cardsHtml}
+                </div>
+            `;
+        }
+
+        function handleDailyKnowAt(idx) {
+            if (!currentCards[idx]) return;
+            const cardData = currentCards[idx];
+
+            // Remove from queue
+            const queueIdx = dailyQueue.findIndex(item => item.index === cardData.index);
+            if (queueIdx !== -1) {
+                dailyQueue.splice(queueIdx, 1);
+            }
+
+            // Mark as learned
+            learnNewWord(cardData.index);
+
+            // Check if daily goal complete
+            if (dailyQueue.length === 0) {
+                showConfetti();
+            }
+
+            renderDailyLearn();
+        }
+
+        function handleDailyLearningAt(idx) {
+            if (!currentCards[idx]) return;
+            const cardData = currentCards[idx];
+
+            // Move to back of queue (remove from current position, add to end)
+            const queueIdx = dailyQueue.findIndex(item => item.index === cardData.index);
+            if (queueIdx !== -1) {
+                dailyQueue.splice(queueIdx, 1);
+                dailyQueue.push(cardData);
+            }
+
+            renderDailyLearn();
+        }
+
+        // ============================================
+        // Review Mode
+        // ============================================
+        function renderReviewMode() {
+            const container = document.getElementById('reviewContent');
+            updateBadges();
+
+            // Get ALL words per stack
+            const stackTotals = {
+                1: getWordsByStack(1, false).length,
+                2: getWordsByStack(2, false).length,
+                3: getWordsByStack(3, false).length,
+                4: getWordsByStack(4, false).length
+            };
+
+            const totalWords = stackTotals[1] + stackTotals[2] + stackTotals[3] + stackTotals[4];
+            document.getElementById('reviewDueCount').textContent = `${totalWords} words in review`;
+
+            if (totalWords === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📚</div>
+                        <div class="empty-state-title">No words in review yet</div>
+                        <div class="empty-state-text">Learn some words first, then come back to review them.</div>
+                        <button class="start-btn" onclick="switchMode('daily')">Learn New Words</button>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+
+            for (let stack = 1; stack <= 4; stack++) {
+                const total = stackTotals[stack];
+                const info = STACK_LABELS[stack];
+                const isExpanded = activeReviewStack === stack;
+
+                html += `
+                    <div class="review-section">
+                        <div class="review-stack-header stack-${stack}-header ${isExpanded ? 'expanded' : ''}" onclick="toggleStack(${stack})">
+                            <div class="review-stack-icon">${info.icon}</div>
+                            <div class="review-stack-info">
+                                <div class="review-stack-title">${info.title}</div>
+                                <div class="review-stack-desc">${info.desc}</div>
+                            </div>
+                            <div class="review-stack-count">
+                                <div class="review-stack-badge">${total} words</div>
+                                <div class="review-stack-arrow">▼</div>
+                            </div>
+                        </div>
+                        <div class="review-stack-content ${isExpanded ? 'show' : ''}" id="stackContent-${stack}">
+                            ${isExpanded && total > 0 ? renderStackCards(stack) : ''}
+                            ${isExpanded && total === 0 ? '<div class="empty-state"><div class="empty-state-text">No words in this stack</div></div>' : ''}
+                        </div>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = html;
+        }
+
+        function toggleStack(stackNum) {
+            if (activeReviewStack === stackNum) {
+                activeReviewStack = null;
+            } else {
+                activeReviewStack = stackNum;
+            }
+            renderReviewMode();
+        }
+
+        function renderStackCards(stackNum) {
+            // Get ALL words in this stack
+            const words = getWordsByStack(stackNum, false);
+            if (words.length === 0) return '<div class="empty-state"><div class="empty-state-text">No words in this stack</div></div>';
+
+            const cardsToShow = Math.min(gridSize, words.length);
+            currentCards = words.slice(0, cardsToShow);
+
+            const cardsHtml = currentCards.map((cardData, idx) => {
+                const word = cardData.word;
+                const p = progress[cardData.index];
+
+                const mnemonicsHtml = word.mnemonics.length > 0
+                    ? `<div class="flashcard-section-title">Memory Tricks</div>
+                       <ul class="mnemonic-list">
+                           ${word.mnemonics.map(m => `<li class="mnemonic-item">${m}</li>`).join('')}
+                       </ul>`
+                    : '';
+
+                const stackSelectorHtml = `
+                    <div class="stack-selector-wrapper">
+                        <span class="stack-selector-label">Move to:</span>
+                        <select class="stack-selector" onchange="moveToStack(${cardData.index}, this.value)" onclick="event.stopPropagation()">
+                            <option value="1" ${p.stack === 1 ? 'selected' : ''}>Stack 1 - Daily</option>
+                            <option value="2" ${p.stack === 2 ? 'selected' : ''}>Stack 2 - Twice Weekly</option>
+                            <option value="3" ${p.stack === 3 ? 'selected' : ''}>Stack 3 - Weekly</option>
+                            <option value="4" ${p.stack === 4 ? 'selected' : ''}>Stack 4 - Mastered</option>
+                        </select>
+                    </div>
+                `;
+
+                return `
+                    <div class="card-wrapper" data-card-index="${idx}">
+                        <div class="flashcard-container">
+                            <div class="flashcard" id="flashcard-${idx}" onclick="flipCardAt(${idx})">
+                                <div class="flashcard-face flashcard-front">
+                                    <div class="flashcard-word">${word.word}</div>
+                                    <div class="flashcard-hint">Tap to reveal</div>
+                                </div>
+                                <div class="flashcard-face flashcard-back">
+                                    <div class="flashcard-section-title">Definition</div>
+                                    <div class="flashcard-definition">${word.definition}</div>
+                                    ${mnemonicsHtml}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-actions">
+                            <button class="action-btn learning" onclick="handleReviewLearningAt(${idx})">
+                                <span>📖</span> Still Learning
+                            </button>
+                            <button class="action-btn know" onclick="handleReviewKnowAt(${idx})">
+                                <span>✓</span> Know It
+                            </button>
+                            ${stackSelectorHtml}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            return `
+                <div class="grid-selector" style="margin-bottom: 16px;">
+                    <button class="grid-btn ${gridSize === 1 ? 'active' : ''}" onclick="setGridSize(1)">1</button>
+                    <button class="grid-btn ${gridSize === 2 ? 'active' : ''}" onclick="setGridSize(2)">2</button>
+                    <button class="grid-btn ${gridSize === 4 ? 'active' : ''}" onclick="setGridSize(4)">4</button>
+                </div>
+                <div class="flashcard-grid grid-${gridSize}">
+                    ${cardsHtml}
+                </div>
+            `;
+        }
+
+        function handleReviewKnowAt(idx) {
+            if (!currentCards[idx]) return;
+            const cardData = currentCards[idx];
+            moveUp(cardData.index);
+
+            if (progress[cardData.index].stack === 4) {
+                showConfetti();
+            }
+
+            renderReviewMode();
+        }
+
+        function handleReviewLearningAt(idx) {
+            if (!currentCards[idx]) return;
+            moveDown(currentCards[idx].index);
+            renderReviewMode();
+        }
+
+        // ============================================
+        // Card Functions (shared)
+        // ============================================
+        function flipCard() {
+            flipCardAt(0);
+        }
+
+        function flipCardAt(idx) {
+            const card = document.getElementById(`flashcard-${idx}`);
+            if (card) card.classList.toggle('flipped');
+        }
+
+        function setGridSize(size) {
+            gridSize = size;
+            localStorage.setItem('gre-vocab-gridSize', size);
+            if (currentMode === 'daily') {
+                renderDailyLearn();
+            } else {
+                renderReviewMode();
+            }
+        }
+
+        // ============================================
+        // Goal Modal
+        // ============================================
+        function openGoalModal() {
+            document.getElementById('goalModal').classList.add('show');
+            document.getElementById('goalSlider').value = dailyGoal;
+            document.getElementById('goalSliderValue').textContent = dailyGoal;
+        }
+
+        function closeGoalModal() {
+            document.getElementById('goalModal').classList.remove('show');
+        }
+
+        function updateGoalSlider(value) {
+            document.getElementById('goalSliderValue').textContent = value;
+        }
+
+        function saveGoal() {
+            dailyGoal = parseInt(document.getElementById('goalSlider').value);
+            localStorage.setItem('gre-vocab-dailyGoal', dailyGoal);
+            // Re-initialize queue with new goal size
+            dailyQueueInitialized = false;
+            closeGoalModal();
+            renderDailyLearn();
+        }
+
+        // ============================================
+        // Reset Functions
+        // ============================================
+        function resetTodayProgress() {
+            if (!confirm('Reset today\'s learning progress? Words you learned today will return to the queue.')) {
+                return;
+            }
+
+            // Reset today's learned count
+            const today = new Date().toISOString().split('T')[0];
+
+            // Find words learned today and reset them
+            VOCAB_DATA.forEach((word, index) => {
+                const p = progress[index];
+                if (p.lastReviewed) {
+                    const reviewDate = p.lastReviewed.split('T')[0];
+                    if (reviewDate === today && p.stack === 1) {
+                        // Reset to unlearned state
+                        p.stack = 0;
+                        p.lastReviewed = null;
+                    }
+                }
+            });
+
+            // Reset today's stats
+            stats.todayNewLearned = 0;
+            stats.todayNewLearnedDate = today;
+
+            // Re-initialize queue
+            dailyQueueInitialized = false;
+
+            saveProgress();
+            saveStats();
+            renderDailyLearn();
+        }
+
+        function resetAllProgress() {
+            if (!confirm('⚠️ Reset ALL progress? This will clear all learned words and cannot be undone!')) {
+                return;
+            }
+
+            // Double confirm for safety
+            if (!confirm('Are you sure? All your progress will be permanently deleted.')) {
+                return;
+            }
+
+            // Reset all progress
+            VOCAB_DATA.forEach((word, index) => {
+                progress[index] = {
+                    stack: 0,
+                    lastReviewed: null,
+                    timesCorrect: 0,
+                    timesWrong: 0
+                };
+            });
+
+            // Reset stats
+            stats = {
+                streak: 0,
+                lastStudyDate: null,
+                todayReviewed: 0,
+                todayDate: null,
+                todayNewLearned: 0,
+                todayNewLearnedDate: null
+            };
+
+            // Re-initialize queue
+            dailyQueueInitialized = false;
+            activeReviewStack = null;
+
+            saveProgress();
+            saveStats();
+            updateStreakDisplay();
+
+            // Switch to daily learn mode
+            switchMode('daily');
+        }
+
+        // Legacy functions for backwards compatibility
+        function handleKnow() { handleReviewKnowAt(0); }
+        function handleLearning() { handleReviewLearningAt(0); }
+        function handleKnowAt(idx) { handleReviewKnowAt(idx); }
+        function handleLearningAt(idx) { handleReviewLearningAt(idx); }
+
+        // ============================================
+        // Quiz Mode
+        // ============================================
+        function renderQuiz() {
+            const container = document.getElementById('quizContent');
+
+            if (VOCAB_DATA.length < 4) {
+                container.innerHTML = '<div class="empty-state">Not enough words for quiz</div>';
+                return;
+            }
+
+            // Pick a random word
+            const randomIndex = Math.floor(Math.random() * VOCAB_DATA.length);
+            currentQuizWord = { word: VOCAB_DATA[randomIndex], index: randomIndex };
+
+            // Get 3 wrong options
+            const wrongOptions = VOCAB_DATA
+                .filter((_, i) => i !== randomIndex)
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 3);
+
+            // Combine and shuffle
+            const options = [currentQuizWord.word, ...wrongOptions].sort(() => Math.random() - 0.5);
+
+            container.innerHTML = `
+                <div class="quiz-question">
+                    <div class="quiz-prompt">Which word means:</div>
+                    <div class="quiz-definition">"${currentQuizWord.word.definition}"</div>
+                </div>
+
+                <div class="quiz-options" id="quizOptions">
+                    ${options.map(opt => `
+                        <button class="quiz-option" data-word="${opt.word}" onclick="selectAnswer('${opt.word}')">
+                            ${opt.word}
+                        </button>
+                    `).join('')}
+                </div>
+
+                <div class="quiz-feedback" id="quizFeedback"></div>
+                <button class="quiz-next" id="quizNext" onclick="nextQuiz()">Next Question</button>
+            `;
+        }
+
+        function selectAnswer(selectedWord) {
+            const correct = selectedWord === currentQuizWord.word.word;
+            const options = document.querySelectorAll('.quiz-option');
+            const feedback = document.getElementById('quizFeedback');
+            const nextBtn = document.getElementById('quizNext');
+
+            quizScore.total++;
+
+            options.forEach(opt => {
+                opt.classList.add('disabled');
+                if (opt.dataset.word === currentQuizWord.word.word) {
+                    opt.classList.add('correct');
+                } else if (opt.dataset.word === selectedWord && !correct) {
+                    opt.classList.add('wrong');
+                }
+            });
+
+            if (correct) {
+                quizScore.correct++;
+                moveUp(currentQuizWord.index);
+                feedback.textContent = '🎉 Correct!';
+                feedback.className = 'quiz-feedback show correct';
+            } else {
+                moveDown(currentQuizWord.index);
+                feedback.textContent = `❌ The answer was: ${currentQuizWord.word.word}`;
+                feedback.className = 'quiz-feedback show wrong';
+            }
+
+            document.getElementById('quizCorrect').textContent = quizScore.correct;
+            document.getElementById('quizTotal').textContent = quizScore.total;
+            nextBtn.classList.add('show');
+        }
+
+        function nextQuiz() {
+            renderQuiz();
+        }
+
+        // ============================================
+        // Progress Dashboard
+        // ============================================
+        function renderProgress() {
+            const counts = { 1: 0, 2: 0, 3: 0, 4: 0 };
+            let learned = 0;
+
+            Object.values(progress).forEach(p => {
+                if (p.lastReviewed !== null) {
+                    learned++;
+                    counts[p.stack] = (counts[p.stack] || 0) + 1;
+                }
+            });
+
+            const total = VOCAB_DATA.length;
+            const mastered = counts[4];
+            const masteryPercent = Math.round((mastered / total) * 100);
+
+            document.getElementById('totalWords').textContent = total;
+            document.getElementById('masteredWords').textContent = mastered;
+            document.getElementById('todayReviewed').textContent = stats.todayReviewed || 0;
+            document.getElementById('masteryPercent').textContent = masteryPercent + '%';
+
+            document.getElementById('stack1Count').textContent = counts[1];
+            document.getElementById('stack2Count').textContent = counts[2];
+            document.getElementById('stack3Count').textContent = counts[3];
+            document.getElementById('stack4Count').textContent = counts[4];
+
+            // Update stack bar (only show learned words)
+            const stackBar = document.getElementById('stackBar');
+            if (learned > 0) {
+                stackBar.innerHTML = `
+                    <div class="stack-segment s1" style="width: ${(counts[1] / learned) * 100}%"></div>
+                    <div class="stack-segment s2" style="width: ${(counts[2] / learned) * 100}%"></div>
+                    <div class="stack-segment s3" style="width: ${(counts[3] / learned) * 100}%"></div>
+                    <div class="stack-segment s4" style="width: ${(counts[4] / learned) * 100}%"></div>
+                `;
+            } else {
+                stackBar.innerHTML = '<div style="width: 100%; text-align: center; color: var(--text-muted); font-size: 12px; line-height: 24px;">No words learned yet</div>';
+            }
+        }
+
+        // ============================================
+        // Confetti
+        // ============================================
+        function showConfetti() {
+            const colors = ['#7C3AED', '#F97316', '#10B981', '#FBBF24', '#F43F5E'];
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti-piece';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                document.body.appendChild(confetti);
+
+                setTimeout(() => confetti.remove(), 3500);
+            }
+        }
+
+        // ============================================
+        // Navigation
+        // ============================================
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const view = btn.dataset.view;
+
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+                document.getElementById(view + 'View').classList.add('active');
+
+                if (view === 'learn') {
+                    if (currentMode === 'daily') {
+                        renderDailyLearn();
+                    } else {
+                        renderReviewMode();
+                    }
+                }
+                if (view === 'quiz') renderQuiz();
+                if (view === 'progress') renderProgress();
+            });
+        });
+
+        // Mode tab event listeners
+        document.querySelectorAll('.mode-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                switchMode(tab.dataset.mode);
+            });
+        });
+
+        // Grid selector event listeners
+        document.querySelectorAll('.grid-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                setGridSize(parseInt(btn.dataset.grid));
+            });
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('goalModal').addEventListener('click', (e) => {
+            if (e.target.id === 'goalModal') {
+                closeGoalModal();
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('learnView').classList.contains('active')) {
+                if (e.code === 'Space') {
+                    e.preventDefault();
+                    flipCard();
+                } else if (e.key === 'ArrowLeft') {
+                    if (currentMode === 'daily') {
+                        handleDailyLearningAt(0);
+                    } else {
+                        handleReviewLearningAt(0);
+                    }
+                } else if (e.key === 'ArrowRight') {
+                    if (currentMode === 'daily') {
+                        handleDailyKnowAt(0);
+                    } else {
+                        handleReviewKnowAt(0);
+                    }
+                }
+            }
+        });
+
+        // ============================================
+        // Initialize
+        // ============================================
+        initProgress();
+        updateStreakDisplay();
+        updateDailyGoalDisplay();
+        updateShuffleButton();
+        renderDailyLearn();
+    </script>
+</body>
+</html>
