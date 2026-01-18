@@ -1438,6 +1438,134 @@
             margin-top: 16px;
         }
 
+        /* Help Button */
+        .help-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            background: var(--card-bg);
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .help-btn:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* Help Modal */
+        .help-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .help-modal-overlay.show {
+            display: flex;
+        }
+
+        .help-modal {
+            background: white;
+            border-radius: 24px;
+            padding: 28px;
+            max-width: 420px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .help-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .help-modal-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .help-modal-close {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            background: var(--border);
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .help-modal-close:hover {
+            background: var(--error);
+            color: white;
+        }
+
+        .help-section {
+            margin-bottom: 16px;
+        }
+
+        .help-section-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .help-item {
+            display: flex;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .help-item:last-child {
+            border-bottom: none;
+        }
+
+        .help-item-icon {
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .help-item-text {
+            font-size: 14px;
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        .help-item-text strong {
+            color: var(--primary);
+        }
+
         /* Custom Mnemonic Input */
         .custom-mnemonic-section {
             margin-top: 16px;
@@ -1690,6 +1818,7 @@
                     <button class="reset-btn" onclick="resetTodayProgress()">
                         <span>↺</span> Reset
                     </button>
+                    <button class="help-btn" onclick="openHelpModal('learn')">?</button>
                 </div>
 
                 <div id="dailyLearnContent">
@@ -1712,6 +1841,7 @@
                         <button class="reset-btn danger" onclick="resetAllProgress()">
                             <span>⚠</span> Reset All
                         </button>
+                        <button class="help-btn" onclick="openHelpModal('review')">?</button>
                     </div>
                 </div>
 
@@ -1732,6 +1862,19 @@
                 <div class="modal-actions">
                     <button class="modal-btn cancel" onclick="closeGoalModal()">Cancel</button>
                     <button class="modal-btn save" onclick="saveGoal()">Save Goal</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Help Modal -->
+        <div class="help-modal-overlay" id="helpModal" onclick="closeHelpModal(event)">
+            <div class="help-modal" onclick="event.stopPropagation()">
+                <div class="help-modal-header">
+                    <div class="help-modal-title" id="helpModalTitle">How to Use</div>
+                    <button class="help-modal-close" onclick="closeHelpModal()">&times;</button>
+                </div>
+                <div id="helpModalContent">
+                    <!-- Content inserted by JavaScript -->
                 </div>
             </div>
         </div>
@@ -2485,6 +2628,92 @@
             dailyQueueInitialized = false;
             closeGoalModal();
             renderDailyLearn();
+        }
+
+        // ============================================
+        // Help Modal Functions
+        // ============================================
+        function openHelpModal(section) {
+            const modal = document.getElementById('helpModal');
+            const title = document.getElementById('helpModalTitle');
+            const content = document.getElementById('helpModalContent');
+
+            if (section === 'learn') {
+                title.textContent = 'How to Learn';
+                content.innerHTML = `
+                    <div class="help-section">
+                        <div class="help-section-title">Getting Started</div>
+                        <div class="help-item">
+                            <span class="help-item-icon">👆</span>
+                            <span class="help-item-text"><strong>Tap the card</strong> to flip it and see the definition</span>
+                        </div>
+                        <div class="help-item">
+                            <span class="help-item-icon">✓</span>
+                            <span class="help-item-text"><strong>Got It</strong> — marks the word as learned and moves it to Review</span>
+                        </div>
+                        <div class="help-item">
+                            <span class="help-item-icon">🔄</span>
+                            <span class="help-item-text"><strong>Show Again</strong> — keeps the word in your queue to practice more</span>
+                        </div>
+                    </div>
+                    <div class="help-section">
+                        <div class="help-section-title">Options</div>
+                        <div class="help-item">
+                            <span class="help-item-icon">🎯</span>
+                            <span class="help-item-text"><strong>Goal</strong> — tap to set how many new words to learn daily</span>
+                        </div>
+                        <div class="help-item">
+                            <span class="help-item-icon">🔀</span>
+                            <span class="help-item-text"><strong>Shuffle</strong> — randomizes the order of cards</span>
+                        </div>
+                        <div class="help-item">
+                            <span class="help-item-icon">↺</span>
+                            <span class="help-item-text"><strong>Reset</strong> — start today's session over</span>
+                        </div>
+                    </div>
+                `;
+            } else if (section === 'review') {
+                title.textContent = 'How to Review';
+                content.innerHTML = `
+                    <div class="help-section">
+                        <div class="help-section-title">The 4-Stack System</div>
+                        <div class="help-item">
+                            <span class="help-item-icon">🔴</span>
+                            <span class="help-item-text"><strong>Stack 1 (Daily)</strong> — words you're still learning</span>
+                        </div>
+                        <div class="help-item">
+                            <span class="help-item-icon">🟠</span>
+                            <span class="help-item-text"><strong>Stack 2 (Twice Weekly)</strong> — getting familiar</span>
+                        </div>
+                        <div class="help-item">
+                            <span class="help-item-icon">🟡</span>
+                            <span class="help-item-text"><strong>Stack 3 (Weekly)</strong> — almost there</span>
+                        </div>
+                        <div class="help-item">
+                            <span class="help-item-icon">🟢</span>
+                            <span class="help-item-text"><strong>Stack 4 (Mastered)</strong> — you know these well!</span>
+                        </div>
+                    </div>
+                    <div class="help-section">
+                        <div class="help-section-title">How Cards Move</div>
+                        <div class="help-item">
+                            <span class="help-item-icon">✓</span>
+                            <span class="help-item-text"><strong>Know It</strong> — moves the card up one stack</span>
+                        </div>
+                        <div class="help-item">
+                            <span class="help-item-icon">📖</span>
+                            <span class="help-item-text"><strong>Still Learning</strong> — moves the card to Stack 1</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            modal.classList.add('show');
+        }
+
+        function closeHelpModal(event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById('helpModal').classList.remove('show');
         }
 
         // ============================================
