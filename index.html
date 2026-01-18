@@ -1948,13 +1948,24 @@
         }
 
         function getWordsByStack(stackNum, onlyDue = false) {
-            return VOCAB_DATA.map((word, index) => ({ word, index }))
+            const words = VOCAB_DATA.map((word, index) => ({ word, index }))
                 .filter(item => {
                     const p = progress[item.index];
                     if (p.lastReviewed === null) return false;
                     if (p.stack !== stackNum) return false;
                     return onlyDue ? isDue(item.index) : true;
                 });
+
+            // For Stack 1, sort by lastReviewed (oldest first) so "Still Learning" cards go to back
+            if (stackNum === 1) {
+                words.sort((a, b) => {
+                    const aTime = new Date(progress[a.index].lastReviewed).getTime();
+                    const bTime = new Date(progress[b.index].lastReviewed).getTime();
+                    return aTime - bTime;
+                });
+            }
+
+            return words;
         }
 
         function getDaysUntilDue(wordIndex) {
