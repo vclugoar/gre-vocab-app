@@ -1441,27 +1441,28 @@
 
         /* Help Button */
         .help-btn {
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            border: 2px solid var(--border);
-            background: var(--card-bg);
+            gap: 4px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: none;
+            background: rgba(124, 58, 237, 0.1);
             font-family: 'Outfit', sans-serif;
-            font-size: 14px;
-            font-weight: 700;
+            font-size: 12px;
+            font-weight: 600;
             color: var(--primary);
             cursor: pointer;
             transition: all 0.2s ease;
         }
 
+        .help-btn span {
+            font-weight: 700;
+        }
+
         .help-btn:hover {
             background: var(--primary);
-            border-color: var(--primary);
             color: white;
-            transform: scale(1.1);
         }
 
         /* Help Modal */
@@ -1816,10 +1817,10 @@
                     <button class="shuffle-btn" id="shuffleBtn" onclick="toggleShuffle()">
                         <span>🔀</span> Shuffle: <span id="shuffleStatus">Off</span>
                     </button>
+                    <button class="help-btn" onclick="openHelpModal('learn')"><span>?</span> How to</button>
                     <button class="reset-btn" onclick="resetTodayProgress()">
                         <span>↺</span> Reset
                     </button>
-                    <button class="help-btn" onclick="openHelpModal('learn')">?</button>
                 </div>
 
                 <div id="dailyLearnContent">
@@ -1839,10 +1840,10 @@
                             <button class="grid-btn" data-grid="2">2</button>
                             <button class="grid-btn" data-grid="4">4</button>
                         </div>
+                        <button class="help-btn" onclick="openHelpModal('review')"><span>?</span> How to</button>
                         <button class="reset-btn danger" onclick="resetAllProgress()">
                             <span>⚠</span> Reset All
                         </button>
-                        <button class="help-btn" onclick="openHelpModal('review')">?</button>
                     </div>
                 </div>
 
