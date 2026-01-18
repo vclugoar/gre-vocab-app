@@ -2368,18 +2368,6 @@
                     </div>
                 `;
 
-                const stackSelectorHtml = `
-                    <div class="stack-selector-wrapper">
-                        <span class="stack-selector-label">Move to:</span>
-                        <select class="stack-selector" onchange="moveToStack(${cardData.index}, this.value)" onclick="event.stopPropagation()">
-                            <option value="1" ${p.stack === 1 ? 'selected' : ''}>Stack 1 - Daily</option>
-                            <option value="2" ${p.stack === 2 ? 'selected' : ''}>Stack 2 - Twice Weekly</option>
-                            <option value="3" ${p.stack === 3 ? 'selected' : ''}>Stack 3 - Weekly</option>
-                            <option value="4" ${p.stack === 4 ? 'selected' : ''}>Stack 4 - Mastered</option>
-                        </select>
-                    </div>
-                `;
-
                 return `
                     <div class="card-wrapper" data-card-index="${idx}">
                         <div class="flashcard-container">
@@ -2404,7 +2392,6 @@
                             <button class="action-btn know" onclick="handleReviewKnowAt(${idx})">
                                 <span>✓</span> Know It
                             </button>
-                            ${stackSelectorHtml}
                         </div>
                     </div>
                 `;
