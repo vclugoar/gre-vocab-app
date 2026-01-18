@@ -1270,6 +1270,64 @@
             gap: 12px;
             margin-top: 16px;
         }
+
+        /* Custom Mnemonic Input */
+        .custom-mnemonic-section {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px dashed var(--border);
+        }
+
+        .custom-mnemonic-label {
+            font-family: 'Outfit', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .custom-mnemonic-input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            color: var(--text-dark);
+            background: white;
+            resize: none;
+            transition: all 0.2s ease;
+        }
+
+        .custom-mnemonic-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+
+        .custom-mnemonic-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .custom-mnemonic-display {
+            background: linear-gradient(135deg, #EDE9FE 0%, #FCE7F3 100%);
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--text-dark);
+            border-left: 4px solid var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .custom-mnemonic-display::before {
+            content: '✨ ';
+        }
     </style>
 </head>
 <body>
@@ -1485,10 +1543,19 @@
                         stack: 0, // 0 = never learned, 1-4 = in review system
                         lastReviewed: null,
                         timesCorrect: 0,
-                        timesWrong: 0
+                        timesWrong: 0,
+                        customMnemonic: ''
                     };
+                } else if (progress[index].customMnemonic === undefined) {
+                    // Add customMnemonic to existing progress entries
+                    progress[index].customMnemonic = '';
                 }
             });
+            saveProgress();
+        }
+
+        function saveCustomMnemonic(wordIndex, text) {
+            progress[wordIndex].customMnemonic = text;
             saveProgress();
         }
 
@@ -1800,12 +1867,27 @@
             // Build cards HTML
             const cardsHtml = currentCards.map((cardData, idx) => {
                 const word = cardData.word;
+                const p = progress[cardData.index];
+                const customMnemonic = p.customMnemonic || '';
+
                 const mnemonicsHtml = word.mnemonics.length > 0
                     ? `<div class="flashcard-section-title">Memory Tricks</div>
                        <ul class="mnemonic-list">
                            ${word.mnemonics.map(m => `<li class="mnemonic-item">${m}</li>`).join('')}
                        </ul>`
                     : '';
+
+                const customMnemonicHtml = `
+                    <div class="custom-mnemonic-section">
+                        ${customMnemonic ? `<div class="custom-mnemonic-display">${customMnemonic}</div>` : ''}
+                        <div class="custom-mnemonic-label">✏️ Your Memory Trick</div>
+                        <textarea class="custom-mnemonic-input"
+                            placeholder="Add your own way to remember this word..."
+                            rows="2"
+                            onclick="event.stopPropagation()"
+                            onblur="saveCustomMnemonic(${cardData.index}, this.value)">${customMnemonic}</textarea>
+                    </div>
+                `;
 
                 return `
                     <div class="card-wrapper" data-card-index="${idx}">
@@ -1826,6 +1908,7 @@
                                     <div class="flashcard-section-title">Definition</div>
                                     <div class="flashcard-definition">${word.definition}</div>
                                     ${mnemonicsHtml}
+                                    ${customMnemonicHtml}
                                 </div>
                             </div>
                         </div>
@@ -1965,6 +2048,7 @@
             const cardsHtml = currentCards.map((cardData, idx) => {
                 const word = cardData.word;
                 const p = progress[cardData.index];
+                const customMnemonic = p.customMnemonic || '';
 
                 const mnemonicsHtml = word.mnemonics.length > 0
                     ? `<div class="flashcard-section-title">Memory Tricks</div>
@@ -1972,6 +2056,18 @@
                            ${word.mnemonics.map(m => `<li class="mnemonic-item">${m}</li>`).join('')}
                        </ul>`
                     : '';
+
+                const customMnemonicHtml = `
+                    <div class="custom-mnemonic-section">
+                        ${customMnemonic ? `<div class="custom-mnemonic-display">${customMnemonic}</div>` : ''}
+                        <div class="custom-mnemonic-label">✏️ Your Memory Trick</div>
+                        <textarea class="custom-mnemonic-input"
+                            placeholder="Add your own way to remember this word..."
+                            rows="2"
+                            onclick="event.stopPropagation()"
+                            onblur="saveCustomMnemonic(${cardData.index}, this.value)">${customMnemonic}</textarea>
+                    </div>
+                `;
 
                 const stackSelectorHtml = `
                     <div class="stack-selector-wrapper">
@@ -1997,6 +2093,7 @@
                                     <div class="flashcard-section-title">Definition</div>
                                     <div class="flashcard-definition">${word.definition}</div>
                                     ${mnemonicsHtml}
+                                    ${customMnemonicHtml}
                                 </div>
                             </div>
                         </div>
