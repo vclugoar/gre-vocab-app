@@ -2526,7 +2526,7 @@
                 return `
                     <div class="card-wrapper" data-card-index="${idx}">
                         <div class="flashcard-container">
-                            <div class="flashcard" id="flashcard-${idx}" onclick="flipCardAt(${idx})">
+                            <div class="flashcard" id="review-flashcard-${idx}" onclick="flipReviewCardAt(${idx})">
                                 <div class="flashcard-face flashcard-front">
                                     <div class="flashcard-word">${word.word}</div>
                                     <div class="flashcard-hint">Tap to reveal</div>
@@ -2586,6 +2586,11 @@
 
         function flipCardAt(idx) {
             const card = document.getElementById(`flashcard-${idx}`);
+            if (card) card.classList.toggle('flipped');
+        }
+
+        function flipReviewCardAt(idx) {
+            const card = document.getElementById(`review-flashcard-${idx}`);
             if (card) card.classList.toggle('flipped');
         }
 
