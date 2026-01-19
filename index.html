@@ -827,10 +827,6 @@
                 padding: 12px 16px;
             }
 
-            .header-content {
-                padding-left: 50px;  /* Space for hamburger button */
-            }
-
             .logo {
                 font-size: 18px;
             }
@@ -992,11 +988,6 @@
             .grid-btn {
                 padding: 6px 12px;
                 font-size: 12px;
-            }
-
-            .hamburger-container {
-                top: 10px;  /* Position within header space */
-                left: 10px;
             }
 
             .hamburger-btn {
@@ -1896,11 +1887,9 @@
             content: '✨ ';
         }
 
-        /* Hamburger Menu - Side Position */
+        /* Hamburger Menu - In Header */
         .hamburger-container {
-            position: fixed;
-            top: 80px;
-            left: 16px;
+            position: relative;
             z-index: 100;
         }
 
@@ -2090,6 +2079,46 @@
 <body>
     <header class="header">
         <div class="header-content">
+            <div class="hamburger-container">
+                <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleMenu()">
+                    <div class="hamburger-icon">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </button>
+                <div class="hamburger-menu" id="hamburgerMenu">
+                    <button class="menu-item active" data-view="learn" onclick="selectView('learn')">
+                        <span class="menu-item-icon">📚</span>
+                        Learn
+                    </button>
+                    <button class="menu-item" data-view="quiz" onclick="selectView('quiz')">
+                        <span class="menu-item-icon">❓</span>
+                        Quiz
+                    </button>
+                    <button class="menu-item" data-view="progress" onclick="selectView('progress')">
+                        <span class="menu-item-icon">📊</span>
+                        Progress
+                    </button>
+                    <button class="menu-item" onclick="openListModal()">
+                        <span class="menu-item-icon">📋</span>
+                        Switch List
+                    </button>
+                    <div class="theme-section">
+                        <div class="theme-section-label">Theme</div>
+                        <button class="theme-option" data-theme="purple" onclick="setTheme('purple')">
+                            <span class="theme-option-icon">💜</span>
+                            Purple
+                            <span class="theme-option-check">✓</span>
+                        </button>
+                        <button class="theme-option" data-theme="blue" onclick="setTheme('blue')">
+                            <span class="theme-option-icon">💙</span>
+                            Blue
+                            <span class="theme-option-check">✓</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
             <div class="logo">Lexica<span class="list-badge" id="listBadge" onclick="openListModal()">Essential</span></div>
             <div class="streak-badge" id="streakBadge">
                 <span>🔥</span>
@@ -2097,47 +2126,6 @@
             </div>
         </div>
     </header>
-
-    <div class="hamburger-container">
-        <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleMenu()">
-            <div class="hamburger-icon">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </button>
-        <div class="hamburger-menu" id="hamburgerMenu">
-            <button class="menu-item active" data-view="learn" onclick="selectView('learn')">
-                <span class="menu-item-icon">📚</span>
-                Learn
-            </button>
-            <button class="menu-item" data-view="quiz" onclick="selectView('quiz')">
-                <span class="menu-item-icon">❓</span>
-                Quiz
-            </button>
-            <button class="menu-item" data-view="progress" onclick="selectView('progress')">
-                <span class="menu-item-icon">📊</span>
-                Progress
-            </button>
-            <button class="menu-item" onclick="openListModal()">
-                <span class="menu-item-icon">📋</span>
-                Switch List
-            </button>
-            <div class="theme-section">
-                <div class="theme-section-label">Theme</div>
-                <button class="theme-option" data-theme="purple" onclick="setTheme('purple')">
-                    <span class="theme-option-icon">💜</span>
-                    Purple
-                    <span class="theme-option-check">✓</span>
-                </button>
-                <button class="theme-option" data-theme="blue" onclick="setTheme('blue')">
-                    <span class="theme-option-icon">💙</span>
-                    Blue
-                    <span class="theme-option-check">✓</span>
-                </button>
-            </div>
-        </div>
-    </div>
 
     <main class="main">
         <!-- Learn View -->
