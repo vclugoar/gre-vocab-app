@@ -12,7 +12,8 @@
             box-sizing: border-box;
         }
 
-        :root {
+        /* Theme: Purple (Original) */
+        :root, [data-theme="purple"] {
             --primary: #7C3AED;
             --primary-light: #A78BFA;
             --primary-dark: #5B21B6;
@@ -24,9 +25,77 @@
             --error-light: #FB7185;
             --bg-gradient: linear-gradient(135deg, #F5F3FF 0%, #EDE9FE 50%, #FDF4FF 100%);
             --card-bg: rgba(255, 255, 255, 0.95);
+            --card-bg-solid: #FFFFFF;
             --text-dark: #1F2937;
             --text-muted: #6B7280;
             --border: #E5E7EB;
+            --shadow-primary: rgba(124, 58, 237, 0.4);
+            --shadow-primary-hover: rgba(124, 58, 237, 0.5);
+            --shadow-primary-light: rgba(124, 58, 237, 0.3);
+            --shadow-primary-subtle: rgba(124, 58, 237, 0.15);
+            --shadow-primary-faint: rgba(124, 58, 237, 0.1);
+            --shadow-secondary: rgba(249, 115, 22, 0.3);
+            --shadow-secondary-hover: rgba(249, 115, 22, 0.4);
+            --shadow-success: rgba(16, 185, 129, 0.4);
+            --shadow-success-hover: rgba(16, 185, 129, 0.5);
+            --shadow-error: rgba(244, 63, 94, 0.4);
+            --shadow-error-hover: rgba(244, 63, 94, 0.5);
+            --shadow-neutral: rgba(0, 0, 0, 0.1);
+            --shadow-neutral-light: rgba(0, 0, 0, 0.08);
+            --shadow-neutral-heavy: rgba(0, 0, 0, 0.15);
+            --mnemonic-bg: linear-gradient(135deg, #F5F3FF 0%, #FDF4FF 100%);
+            --custom-mnemonic-bg: linear-gradient(135deg, #EDE9FE 0%, #FCE7F3 100%);
+            --quiz-correct-bg: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+            --quiz-wrong-bg: linear-gradient(135deg, #FEF2F2 0%, #FECACA 100%);
+            --quiz-hover-bg: #F5F3FF;
+            --stack-3: #FBBF24;
+            --stack-3-light: #FCD34D;
+            --daily-complete-bg: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+            --list-option-hover: #F5F3FF;
+            --list-option-active: linear-gradient(135deg, #F5F3FF 0%, #FDF4FF 100%);
+        }
+
+        /* Theme: Blue */
+        [data-theme="blue"] {
+            --primary: #3B82F6;
+            --primary-light: #60A5FA;
+            --primary-dark: #2563EB;
+            --secondary: #0EA5E9;
+            --secondary-light: #38BDF8;
+            --success: #10B981;
+            --success-light: #34D399;
+            --error: #EF4444;
+            --error-light: #F87171;
+            --bg-gradient: linear-gradient(135deg, #EFF6FF 0%, #F0F9FF 100%);
+            --card-bg: rgba(255, 255, 255, 0.98);
+            --card-bg-solid: #FFFFFF;
+            --text-dark: #1E293B;
+            --text-muted: #64748B;
+            --border: #BFDBFE;
+            --shadow-primary: rgba(59, 130, 246, 0.3);
+            --shadow-primary-hover: rgba(59, 130, 246, 0.4);
+            --shadow-primary-light: rgba(59, 130, 246, 0.2);
+            --shadow-primary-subtle: rgba(59, 130, 246, 0.12);
+            --shadow-primary-faint: rgba(59, 130, 246, 0.08);
+            --shadow-secondary: rgba(14, 165, 233, 0.25);
+            --shadow-secondary-hover: rgba(14, 165, 233, 0.35);
+            --shadow-success: rgba(16, 185, 129, 0.3);
+            --shadow-success-hover: rgba(16, 185, 129, 0.4);
+            --shadow-error: rgba(239, 68, 68, 0.3);
+            --shadow-error-hover: rgba(239, 68, 68, 0.4);
+            --shadow-neutral: rgba(59, 130, 246, 0.08);
+            --shadow-neutral-light: rgba(59, 130, 246, 0.05);
+            --shadow-neutral-heavy: rgba(59, 130, 246, 0.12);
+            --mnemonic-bg: linear-gradient(135deg, #EFF6FF 0%, #E0F2FE 100%);
+            --custom-mnemonic-bg: linear-gradient(135deg, #DBEAFE 0%, #BAE6FD 100%);
+            --quiz-correct-bg: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+            --quiz-wrong-bg: linear-gradient(135deg, #FEF2F2 0%, #FECACA 100%);
+            --quiz-hover-bg: #DBEAFE;
+            --stack-3: #60A5FA;
+            --stack-3-light: #93C5FD;
+            --daily-complete-bg: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+            --list-option-hover: #DBEAFE;
+            --list-option-active: linear-gradient(135deg, #DBEAFE 0%, #BAE6FD 100%);
         }
 
         body {
@@ -76,7 +145,7 @@
             border-radius: 50px;
             font-weight: 600;
             font-size: 14px;
-            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+            box-shadow: 0 4px 15px var(--shadow-secondary);
         }
 
         /* Navigation */
@@ -105,15 +174,15 @@
         }
 
         .nav-btn:hover {
-            background: white;
+            background: var(--card-bg-solid);
             transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 20px var(--shadow-neutral-light);
         }
 
         .nav-btn.active {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
             color: white;
-            box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4);
+            box-shadow: 0 4px 20px var(--shadow-primary);
         }
 
         /* Main Container */
@@ -224,7 +293,7 @@
         }
 
         .mnemonic-item {
-            background: linear-gradient(135deg, #F5F3FF 0%, #FDF4FF 100%);
+            background: var(--mnemonic-bg);
             padding: 12px 16px;
             border-radius: 12px;
             margin-bottom: 8px;
@@ -287,23 +356,23 @@
         .action-btn.know {
             background: linear-gradient(135deg, var(--success) 0%, var(--success-light) 100%);
             color: white;
-            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
+            box-shadow: 0 4px 20px var(--shadow-success);
         }
 
         .action-btn.know:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.5);
+            box-shadow: 0 8px 30px var(--shadow-success-hover);
         }
 
         .action-btn.learning {
             background: linear-gradient(135deg, var(--error) 0%, var(--error-light) 100%);
             color: white;
-            box-shadow: 0 4px 20px rgba(244, 63, 94, 0.4);
+            box-shadow: 0 4px 20px var(--shadow-error);
         }
 
         .action-btn.learning:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 30px rgba(244, 63, 94, 0.5);
+            box-shadow: 0 8px 30px var(--shadow-error-hover);
         }
 
         /* Progress info */
@@ -340,7 +409,7 @@
 
         .stack-1 { background: var(--error); }
         .stack-2 { background: var(--secondary); }
-        .stack-3 { background: #FBBF24; }
+        .stack-3 { background: var(--stack-3); }
         .stack-4 { background: var(--success); }
 
         /* Quiz Mode */
@@ -389,7 +458,7 @@
 
         .quiz-option:hover:not(.disabled) {
             border-color: var(--primary);
-            background: #F5F3FF;
+            background: var(--quiz-hover-bg);
             transform: translateY(-2px);
         }
 
@@ -427,12 +496,12 @@
         }
 
         .quiz-feedback.correct {
-            background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+            background: var(--quiz-correct-bg);
             color: var(--success);
         }
 
         .quiz-feedback.wrong {
-            background: linear-gradient(135deg, #FEF2F2 0%, #FECACA 100%);
+            background: var(--quiz-wrong-bg);
             color: var(--error);
         }
 
@@ -448,7 +517,7 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4);
+            box-shadow: 0 4px 20px var(--shadow-primary);
             transition: all 0.3s ease;
         }
 
@@ -458,7 +527,7 @@
 
         .quiz-next:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 30px rgba(124, 58, 237, 0.5);
+            box-shadow: 0 8px 30px var(--shadow-primary-hover);
         }
 
         .quiz-score {
@@ -549,7 +618,7 @@
 
         .stack-segment.s1 { background: linear-gradient(135deg, var(--error) 0%, var(--error-light) 100%); }
         .stack-segment.s2 { background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-light) 100%); }
-        .stack-segment.s3 { background: linear-gradient(135deg, #FBBF24 0%, #FCD34D 100%); }
+        .stack-segment.s3 { background: linear-gradient(135deg, var(--stack-3) 0%, var(--stack-3-light) 100%); }
         .stack-segment.s4 { background: linear-gradient(135deg, var(--success) 0%, var(--success-light) 100%); }
 
         .stack-legend {
@@ -628,7 +697,7 @@
 
         .backup-btn.export:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
+            box-shadow: 0 6px 20px var(--shadow-primary);
         }
 
         .backup-btn.import {
@@ -674,13 +743,13 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4);
+            box-shadow: 0 4px 20px var(--shadow-primary);
             transition: all 0.3s ease;
         }
 
         .start-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 30px rgba(124, 58, 237, 0.5);
+            box-shadow: 0 8px 30px var(--shadow-primary-hover);
         }
 
         /* Responsive - Tablet */
@@ -1149,7 +1218,7 @@
         .mode-tab.active {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
             color: white;
-            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+            box-shadow: 0 4px 15px var(--shadow-primary-light);
         }
 
         .mode-tab .badge {
@@ -1177,13 +1246,13 @@
             font-size: 14px;
             font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+            box-shadow: 0 4px 15px var(--shadow-secondary);
             transition: all 0.2s ease;
         }
 
         .daily-goal-inline:hover {
             transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4);
+            box-shadow: 0 6px 20px var(--shadow-secondary-hover);
         }
 
         .goal-bar-inline {
@@ -1221,7 +1290,7 @@
         }
 
         .modal-content {
-            background: white;
+            background: var(--card-bg-solid);
             border-radius: 24px;
             padding: 32px;
             max-width: 400px;
@@ -1317,7 +1386,7 @@
         }
 
         .list-modal {
-            background: white;
+            background: var(--card-bg-solid);
             border-radius: 24px;
             padding: 32px;
             max-width: 420px;
@@ -1348,13 +1417,13 @@
 
         .list-option:hover {
             border-color: var(--primary);
-            background: #F5F3FF;
+            background: var(--list-option-hover);
             transform: translateY(-2px);
         }
 
         .list-option.active {
             border-color: var(--primary);
-            background: linear-gradient(135deg, #F5F3FF 0%, #FDF4FF 100%);
+            background: var(--list-option-active);
         }
 
         .list-option-icon {
@@ -1391,7 +1460,7 @@
             font-weight: 600;
             padding: 4px 10px;
             border-radius: 20px;
-            background: rgba(124, 58, 237, 0.15);
+            background: var(--shadow-primary-subtle);
             color: var(--primary);
             margin-left: 8px;
             cursor: pointer;
@@ -1428,7 +1497,7 @@
 
         .review-stack-header.stack-1-header { border-left: 4px solid var(--error); }
         .review-stack-header.stack-2-header { border-left: 4px solid var(--secondary); }
-        .review-stack-header.stack-3-header { border-left: 4px solid #FBBF24; }
+        .review-stack-header.stack-3-header { border-left: 4px solid var(--stack-3); }
         .review-stack-header.stack-4-header { border-left: 4px solid var(--success); }
 
         .review-stack-icon {
@@ -1443,7 +1512,7 @@
 
         .stack-1-header .review-stack-icon { background: linear-gradient(135deg, var(--error) 0%, var(--error-light) 100%); }
         .stack-2-header .review-stack-icon { background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-light) 100%); }
-        .stack-3-header .review-stack-icon { background: linear-gradient(135deg, #FBBF24 0%, #FCD34D 100%); }
+        .stack-3-header .review-stack-icon { background: linear-gradient(135deg, var(--stack-3) 0%, var(--stack-3-light) 100%); }
         .stack-4-header .review-stack-icon { background: linear-gradient(135deg, var(--success) 0%, var(--success-light) 100%); }
 
         .review-stack-info {
@@ -1478,7 +1547,7 @@
 
         .stack-1-header .review-stack-badge { background: #FEE2E2; color: var(--error); }
         .stack-2-header .review-stack-badge { background: #FFEDD5; color: var(--secondary); }
-        .stack-3-header .review-stack-badge { background: #FEF3C7; color: #D97706; }
+        .stack-3-header .review-stack-badge { background: #FEF3C7; color: var(--stack-3); }
         .stack-4-header .review-stack-badge { background: #D1FAE5; color: var(--success); }
 
         .review-stack-arrow {
@@ -1505,7 +1574,7 @@
         .daily-complete {
             text-align: center;
             padding: 40px 20px;
-            background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+            background: var(--daily-complete-bg);
             border-radius: 20px;
             margin-bottom: 20px;
         }
@@ -1571,11 +1640,11 @@
         }
 
         .stack-selector:hover {
-            background: rgba(124, 58, 237, 0.1);
+            background: var(--shadow-primary-faint);
         }
 
         .stack-selector:focus {
-            background: rgba(124, 58, 237, 0.1);
+            background: var(--shadow-primary-faint);
         }
 
         /* Stack Selector in Action Bar */
@@ -1644,7 +1713,7 @@
             padding: 8px 12px;
             border-radius: 8px;
             border: none;
-            background: rgba(124, 58, 237, 0.1);
+            background: var(--shadow-primary-faint);
             font-family: 'Outfit', sans-serif;
             font-size: 12px;
             font-weight: 600;
@@ -1682,7 +1751,7 @@
         }
 
         .help-modal {
-            background: white;
+            background: var(--card-bg-solid);
             border-radius: 24px;
             padding: 28px;
             max-width: 420px;
@@ -1793,7 +1862,7 @@
             font-family: 'Inter', sans-serif;
             font-size: 14px;
             color: var(--text-dark);
-            background: white;
+            background: var(--card-bg-solid);
             resize: none;
             transition: all 0.2s ease;
         }
@@ -1801,7 +1870,7 @@
         .custom-mnemonic-input:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+            box-shadow: 0 0 0 3px var(--shadow-primary-faint);
         }
 
         .custom-mnemonic-input::placeholder {
@@ -1809,7 +1878,7 @@
         }
 
         .custom-mnemonic-display {
-            background: linear-gradient(135deg, #EDE9FE 0%, #FCE7F3 100%);
+            background: var(--custom-mnemonic-bg);
             padding: 12px 16px;
             border-radius: 12px;
             font-size: 14px;
@@ -1951,6 +2020,67 @@
         .current-view-label {
             display: none;
         }
+
+        /* Theme Switcher */
+        .theme-section {
+            padding: 8px 0;
+            margin-top: 8px;
+            border-top: 1px solid var(--border);
+        }
+
+        .theme-section-label {
+            font-family: 'Outfit', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 8px 16px 4px;
+        }
+
+        .theme-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            padding: 10px 16px;
+            border: none;
+            background: transparent;
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-dark);
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .theme-option:hover {
+            background: var(--shadow-primary-faint);
+        }
+
+        .theme-option.active {
+            background: var(--shadow-primary-subtle);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .theme-option-icon {
+            font-size: 16px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .theme-option-check {
+            margin-left: auto;
+            font-size: 14px;
+            color: var(--primary);
+            opacity: 0;
+        }
+
+        .theme-option.active .theme-option-check {
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -1989,6 +2119,19 @@
                 <span class="menu-item-icon">📋</span>
                 Switch List
             </button>
+            <div class="theme-section">
+                <div class="theme-section-label">Theme</div>
+                <button class="theme-option" data-theme="purple" onclick="setTheme('purple')">
+                    <span class="theme-option-icon">💜</span>
+                    Purple
+                    <span class="theme-option-check">✓</span>
+                </button>
+                <button class="theme-option" data-theme="blue" onclick="setTheme('blue')">
+                    <span class="theme-option-icon">💙</span>
+                    Blue
+                    <span class="theme-option-check">✓</span>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -2300,6 +2443,43 @@
         let quizScore = { correct: 0, total: 0 };
         let currentQuizWord = null;
         let gridSize = parseInt(localStorage.getItem('gre-vocab-gridSize')) || 1;
+        let currentTheme = localStorage.getItem('gre-vocab-theme') || 'purple';
+
+        // ============================================
+        // Theme Management
+        // ============================================
+        function initTheme() {
+            const savedTheme = localStorage.getItem('gre-vocab-theme') || 'purple';
+            setTheme(savedTheme, false);
+        }
+
+        function setTheme(themeName, save = true) {
+            currentTheme = themeName;
+            document.documentElement.setAttribute('data-theme', themeName);
+
+            if (save) {
+                localStorage.setItem('gre-vocab-theme', themeName);
+            }
+
+            // Update theme option buttons
+            document.querySelectorAll('.theme-option').forEach(btn => {
+                if (btn.dataset.theme === themeName) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        function getCurrentTheme() {
+            return currentTheme;
+        }
+
+        // Initialize theme immediately (before DOM fully loads for smooth experience)
+        (function() {
+            const savedTheme = localStorage.getItem('gre-vocab-theme') || 'purple';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        })();
 
         // Initialize progress for all words
         function initProgress() {
@@ -3237,7 +3417,8 @@
                 settings: {
                     dailyGoal: dailyGoal,
                     shuffleEnabled: shuffleEnabled,
-                    gridSize: gridSize
+                    gridSize: gridSize,
+                    theme: currentTheme
                 }
             };
 
@@ -3312,9 +3493,11 @@
                         dailyGoal = data.settings.dailyGoal || 10;
                         shuffleEnabled = data.settings.shuffleEnabled !== false;
                         gridSize = data.settings.gridSize || 1;
+                        const theme = data.settings.theme || 'purple';
                         localStorage.setItem('gre-vocab-dailyGoal', dailyGoal);
                         localStorage.setItem('gre-vocab-shuffle', shuffleEnabled);
                         localStorage.setItem('gre-vocab-gridSize', gridSize);
+                        localStorage.setItem('gre-vocab-theme', theme);
                     }
 
                     alert('✅ Data imported successfully! The page will now reload.');
@@ -3569,6 +3752,7 @@
             initProgress();
             updateListBadge();
         }
+        initTheme();
         updateStreakDisplay();
         updateDailyGoalDisplay();
         updateShuffleButton();
