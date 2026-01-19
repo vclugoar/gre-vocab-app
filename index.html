@@ -2015,8 +2015,8 @@
                             <div class="goal-fill-inline" id="dailyGoalFill"></div>
                         </div>
                     </div>
-                    <button class="shuffle-btn" id="shuffleBtn" onclick="toggleShuffle()">
-                        <span>🔀</span> Shuffle: <span id="shuffleStatus">Off</span>
+                    <button class="shuffle-btn active" id="shuffleBtn" onclick="toggleShuffle()">
+                        <span>🔀</span> Shuffle: <span id="shuffleStatus">On</span>
                     </button>
                     <button class="help-btn" onclick="openHelpModal('learn')">How to use</button>
                     <button class="reset-btn" onclick="resetTodayProgress()">
@@ -2290,7 +2290,7 @@
         };
 
         let dailyGoal = parseInt(localStorage.getItem('gre-vocab-dailyGoal')) || 10;
-        let shuffleEnabled = localStorage.getItem('gre-vocab-shuffle') === 'true';
+        let shuffleEnabled = localStorage.getItem('gre-vocab-shuffle') !== 'false';
         let dailyQueue = []; // Queue of words for today's learning session
         let dailyQueueInitialized = false;
         let currentMode = 'daily'; // 'daily' or 'review'
@@ -3310,7 +3310,7 @@
                     // Import settings if available
                     if (data.settings) {
                         dailyGoal = data.settings.dailyGoal || 10;
-                        shuffleEnabled = data.settings.shuffleEnabled || false;
+                        shuffleEnabled = data.settings.shuffleEnabled !== false;
                         gridSize = data.settings.gridSize || 1;
                         localStorage.setItem('gre-vocab-dailyGoal', dailyGoal);
                         localStorage.setItem('gre-vocab-shuffle', shuffleEnabled);
