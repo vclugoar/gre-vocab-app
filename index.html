@@ -2362,10 +2362,18 @@
             saveDailyQueue();
         }
 
+        function getESTDateString() {
+            // Get current date in EST timezone
+            const now = new Date();
+            const estDate = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+            return estDate.toDateString();
+        }
+
         function saveDailyQueue() {
             const queueData = {
                 queue: dailyQueue.map(item => item.index),
                 timestamp: Date.now(),
+                dateEST: getESTDateString(),
                 listType: activeList
             };
             localStorage.setItem('lexica-daily-queue', JSON.stringify(queueData));
@@ -2377,11 +2385,13 @@
 
             try {
                 const data = JSON.parse(saved);
-                const twelveHours = 12 * 60 * 60 * 1000;
-                const isExpired = Date.now() - data.timestamp > twelveHours;
+                const twentyFourHours = 24 * 60 * 60 * 1000;
+                const isExpired = Date.now() - data.timestamp > twentyFourHours;
+                const isDifferentDay = data.dateEST !== getESTDateString();
                 const isDifferentList = data.listType !== activeList;
 
-                if (isExpired || isDifferentList) {
+                // Reset if: past midnight EST, over 24 hours old, or different word list
+                if (isDifferentDay || isExpired || isDifferentList) {
                     localStorage.removeItem('lexica-daily-queue');
                     return false;
                 }
