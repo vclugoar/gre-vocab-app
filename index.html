@@ -2333,12 +2333,51 @@
             // Limit to daily goal
             dailyQueue = allNew.slice(0, dailyGoal);
             dailyQueueInitialized = true;
+            saveDailyQueue();
+        }
+
+        function saveDailyQueue() {
+            const queueData = {
+                queue: dailyQueue.map(item => item.index),
+                timestamp: Date.now(),
+                listType: activeList
+            };
+            localStorage.setItem('lexica-daily-queue', JSON.stringify(queueData));
+        }
+
+        function loadDailyQueue() {
+            const saved = localStorage.getItem('lexica-daily-queue');
+            if (!saved) return false;
+
+            try {
+                const data = JSON.parse(saved);
+                const twelveHours = 12 * 60 * 60 * 1000;
+                const isExpired = Date.now() - data.timestamp > twelveHours;
+                const isDifferentList = data.listType !== activeList;
+
+                if (isExpired || isDifferentList) {
+                    localStorage.removeItem('lexica-daily-queue');
+                    return false;
+                }
+
+                // Restore queue from saved indices
+                dailyQueue = data.queue
+                    .map(idx => ({ word: VOCAB_DATA[idx], index: idx }))
+                    .filter(item => item.word && progress[item.index]?.lastReviewed === null);
+
+                dailyQueueInitialized = true;
+                return true;
+            } catch (e) {
+                return false;
+            }
         }
 
         function getDailyQueueWords() {
-            // Initialize queue if not done yet
+            // Try to restore from localStorage first
             if (!dailyQueueInitialized) {
-                initDailyQueue();
+                if (!loadDailyQueue()) {
+                    initDailyQueue();
+                }
             }
             return dailyQueue;
         }
@@ -2687,9 +2726,18 @@
             // Mark as learned
             learnNewWord(cardData.index);
 
+            // Save queue state
+            saveDailyQueue();
+
             // Check if daily goal complete
             if (dailyQueue.length === 0) {
                 showConfetti();
+                // Show prompt to adjust goal if they want more
+                setTimeout(() => {
+                    if (confirm('🎉 Daily goal complete! Want to learn more words today?\n\nClick OK to adjust your daily goal.')) {
+                        openGoalModal();
+                    }
+                }, 1500);
             }
 
             renderDailyLearn();
@@ -2705,6 +2753,9 @@
                 dailyQueue.splice(queueIdx, 1);
                 dailyQueue.push(cardData);
             }
+
+            // Save queue state
+            saveDailyQueue();
 
             renderDailyLearn();
         }
@@ -2918,7 +2969,8 @@
         function saveGoal() {
             dailyGoal = parseInt(document.getElementById('goalSlider').value);
             localStorage.setItem('gre-vocab-dailyGoal', dailyGoal);
-            // Re-initialize queue with new goal size
+            // Clear saved queue and re-initialize with new goal size
+            localStorage.removeItem('lexica-daily-queue');
             dailyQueueInitialized = false;
             closeGoalModal();
             renderDailyLearn();
