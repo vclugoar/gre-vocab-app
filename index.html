@@ -2541,6 +2541,13 @@
             return estDate.toDateString();
         }
 
+        function getESTDateISO() {
+            // Get current date in EST timezone in ISO format (YYYY-MM-DD)
+            const now = new Date();
+            const estDate = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+            return estDate.toISOString().split('T')[0];
+        }
+
         function saveDailyQueue() {
             const queueData = {
                 queue: dailyQueue.map(item => item.index),
@@ -2731,7 +2738,7 @@
         }
 
         function updateTodayStats() {
-            const today = new Date().toISOString().split('T')[0];
+            const today = getESTDateISO();
 
             if (stats.todayDate !== today) {
                 if (stats.lastStudyDate) {
