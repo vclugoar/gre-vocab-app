@@ -234,6 +234,32 @@
             border-left: 4px solid var(--primary);
         }
 
+        /* Speaker Button */
+        .speak-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            font-size: 22px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: all 0.2s ease;
+            padding: 8px;
+            border-radius: 50%;
+            line-height: 1;
+        }
+
+        .speak-btn:hover {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .speak-btn:active {
+            transform: scale(0.95);
+        }
+
         /* Flashcard Actions */
         .flashcard-actions {
             display: flex;
@@ -2682,6 +2708,7 @@
                         <div class="flashcard-container">
                             <div class="flashcard" id="flashcard-${idx}" onclick="flipCardAt(${idx})">
                                 <div class="flashcard-face flashcard-front">
+                                    <button class="speak-btn" onclick="speakWord('${word.word}'); event.stopPropagation();" aria-label="Pronounce word">🔊</button>
                                     <div class="flashcard-word">${word.word}</div>
                                     <div class="flashcard-hint">Tap to reveal</div>
                                 </div>
@@ -2867,6 +2894,7 @@
                         <div class="flashcard-container">
                             <div class="flashcard" id="review-flashcard-${idx}" onclick="flipReviewCardAt(${idx})">
                                 <div class="flashcard-face flashcard-front">
+                                    <button class="speak-btn" onclick="speakWord('${word.word}'); event.stopPropagation();" aria-label="Pronounce word">🔊</button>
                                     <div class="flashcard-word">${word.word}</div>
                                     <div class="flashcard-hint">Tap to reveal</div>
                                 </div>
@@ -2931,6 +2959,16 @@
         function flipReviewCardAt(idx) {
             const card = document.getElementById(`review-flashcard-${idx}`);
             if (card) card.classList.toggle('flipped');
+        }
+
+        function speakWord(word) {
+            if ('speechSynthesis' in window) {
+                speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(word);
+                utterance.rate = 0.9;
+                utterance.pitch = 1;
+                speechSynthesis.speak(utterance);
+            }
         }
 
         function setGridSize(size) {
