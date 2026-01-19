@@ -1,6 +1,6 @@
 // GRE Vocabulary Data - Essential List
 // Source: TestCrackers GRE Word List
-// 502 core GRE vocabulary words
+// 500 core GRE vocabulary words
 
 const VOCAB_ESSENTIALS = [
   { word: "Abate", definition: "(v) Reduce, Diminish, become less in amount or intensity;", mnemonics: ["Abe ate all the food...now it's all gone KP", "mosquito abatement-city sprays to kill mosquitos, abandoned vehicle abatement-city tows away abandoned cars -jlue"] },
@@ -25,7 +25,6 @@ const VOCAB_ESSENTIALS = [
   { word: "Alacrity", definition: "Cheerful or Speedy willingness", mnemonics: ["I lack pity for myself, so I will complete this task with alacrity!"] },
   { word: "Alienate", definition: "Cause to become unfriendly, hostile, or distant", mnemonics: ["You know, unfriendly like the Alien in Alien."] },
   { word: "alleviate", definition: "Lessen, make easier to endure", mnemonics: ["I'm pretty sure this is what \"Aleve\"'s marketing team was thinking about when they named their product"] },
-  { word: "", definition: "", mnemonics: [] },
   { word: "Ambiguous", definition: "Not clear, hard to understand, open to having several meanings of interpretations", mnemonics: ["If it is unclear whether you're talking about U or US, you're being ambiguous"] },
   { word: "Ambivalent", definition: "Uncertain; unable to decide, or wanting to do two contradictory things at once", mnemonics: ["I am ambivalent about bivalent chromosomes. Maybe they are great, maybe they aren’t, I don’t really know because I’m not sure what they do."] },
   { word: "Analogous", definition: "Comparable, corresponding in some particular way (making a good analogy)", mnemonics: [] },
@@ -56,7 +55,6 @@ const VOCAB_ESSENTIALS = [
   { word: "Avid", definition: "Enthusiastic, dedicated, passionate; excessively desirous", mnemonics: ["Alvin has become too avid about avidin protein! Though he started by simply eating omelets for a boost in avidin, things have quickly escalated and he is dedicatedly drinking glasses of raw egg whites every day."] },
   { word: "Balk", definition: "Refuse to proceed or to do something", mnemonics: ["Picture Balki from Perfect Strangers getting into a bad situation and then refusing to go forward"] },
   { word: "Base", definition: "Morally low, mean, dishonorable; or little or no value; crude and unrefined; counterfeit", mnemonics: ["At the base level of something - no value"] },
-  { word: "", definition: "", mnemonics: [] },
   { word: "Belie", definition: "Contradict or misrepresent", mnemonics: ["\"to be lying\""] },
   { word: "Benign", definition: "Harmless; favorable; kindle, gentle, or beneficial; not cancerous", mnemonics: [] },
   { word: "Bogus", definition: "Fake, fraudulent", mnemonics: ["Poor Bogut got nailed with a bogus foul"] },
