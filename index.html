@@ -2424,6 +2424,17 @@
             todayNewLearnedDate: null
         };
 
+        // Migrate stats from UTC to EST date format (one-time)
+        if (!localStorage.getItem('gre-vocab-stats-v2')) {
+            stats.todayDate = null;
+            stats.todayReviewed = 0;
+            stats.todayNewLearnedDate = null;
+            stats.todayNewLearned = 0;
+            // Keep streak and lastStudyDate - streak logic will handle the transition
+            localStorage.setItem('gre-vocab-stats-v2', 'true');
+            localStorage.setItem('gre-vocab-stats', JSON.stringify(stats));
+        }
+
         let dailyGoal = parseInt(localStorage.getItem('gre-vocab-dailyGoal')) || 10;
         let shuffleEnabled = localStorage.getItem('gre-vocab-shuffle') !== 'false';
         let dailyQueue = []; // Queue of words for today's learning session
