@@ -3459,55 +3459,6 @@
             }
         });
 
-        // Mobile swipe gestures
-        let touchStartX = 0;
-        let touchStartY = 0;
-        let touchEndX = 0;
-        let touchEndY = 0;
-        const minSwipeDistance = 50;
-
-        document.addEventListener('touchstart', (e) => {
-            touchStartX = e.changedTouches[0].screenX;
-            touchStartY = e.changedTouches[0].screenY;
-        }, { passive: true });
-
-        document.addEventListener('touchend', (e) => {
-            touchEndX = e.changedTouches[0].screenX;
-            touchEndY = e.changedTouches[0].screenY;
-            handleSwipe();
-        }, { passive: true });
-
-        function handleSwipe() {
-            const deltaX = touchEndX - touchStartX;
-            const deltaY = touchEndY - touchStartY;
-
-            // Only handle horizontal swipes (ignore if vertical movement is greater)
-            if (Math.abs(deltaX) < minSwipeDistance || Math.abs(deltaY) > Math.abs(deltaX)) {
-                return;
-            }
-
-            // Only handle swipes on Learn view
-            if (!document.getElementById('learnView').classList.contains('active')) {
-                return;
-            }
-
-            if (deltaX > 0) {
-                // Swiped right = Got It / Know It
-                if (currentMode === 'daily') {
-                    handleDailyKnowAt(0);
-                } else {
-                    handleReviewKnowAt(0);
-                }
-            } else {
-                // Swiped left = Show Again / Still Learning
-                if (currentMode === 'daily') {
-                    handleDailyLearningAt(0);
-                } else {
-                    handleReviewLearningAt(0);
-                }
-            }
-        }
-
         // ============================================
         // Initialize
         // ============================================
